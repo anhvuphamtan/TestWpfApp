@@ -1,0 +1,12 @@
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\bin\Debug\net6.0-windows\BusinessObject.deps.json
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\bin\Debug\net6.0-windows\BusinessObject.dll
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\bin\Debug\net6.0-windows\BusinessObject.pdb
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.AssemblyInfoInputs.cache
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.AssemblyInfo.cs
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.csproj.CoreCompileInputs.cache
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.dll
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\refint\BusinessObject.dll
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.pdb
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\ref\BusinessObject.dll
+D:\source\.NET\Jarvis_Windows_App\BusinessObject\obj\Debug\net6.0-windows\BusinessObject.csproj.AssemblyReference.cache

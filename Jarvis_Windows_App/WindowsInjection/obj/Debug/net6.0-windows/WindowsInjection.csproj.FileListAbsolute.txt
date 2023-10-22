@@ -1,0 +1,11 @@
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\bin\Debug\net6.0-windows\WindowsInjection.deps.json
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\bin\Debug\net6.0-windows\WindowsInjection.dll
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\bin\Debug\net6.0-windows\WindowsInjection.pdb
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.GeneratedMSBuildEditorConfig.editorconfig
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.AssemblyInfoInputs.cache
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.AssemblyInfo.cs
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.csproj.CoreCompileInputs.cache
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.dll
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\refint\WindowsInjection.dll
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\WindowsInjection.pdb
+D:\source\.NET\Jarvis_Windows_App\WindowsInjection\obj\Debug\net6.0-windows\ref\WindowsInjection.dll

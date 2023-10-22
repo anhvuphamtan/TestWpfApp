@@ -1,0 +1,5 @@
+D:\source\.NET\Jarvis_Windows_App\Jarvis_Windows\obj\Debug\net6.0-windows\Jarvis_Windows.csproj.AssemblyReference.cache
+D:\source\.NET\Jarvis_Windows_App\Jarvis_Windows\obj\Debug\net6.0-windows\MainWindow.g.cs
+D:\source\.NET\Jarvis_Windows_App\Jarvis_Windows\obj\Debug\net6.0-windows\App.g.cs
+D:\source\.NET\Jarvis_Windows_App\Jarvis_Windows\obj\Debug\net6.0-windows\Jarvis_Windows_MarkupCompile.cache
+D:\source\.NET\Jarvis_Windows_App\Jarvis_Windows\obj\Debug\net6.0-windows\Jarvis_Windows_MarkupCompile.lref
