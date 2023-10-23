@@ -1,0 +1,12 @@
+﻿<Window x:Class="Jarvis_Windows.Presentations.LoginPremium.LoginPremium_Window"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Jarvis_Windows.Presentations.LoginPremium"
+        mc:Ignorable="d"
+        Title="LoginPremium_Window" Height="450" Width="800">
+    <Grid>
+        
+    </Grid>
+</Window>
