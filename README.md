@@ -1,47 +1,7 @@
 
-# JavisWindows
+# Jarvis Windows Application
 
-## Project structure (follow MVVM architecture)
-
-****JarvisWindows/**** (Project name folder)\
-├── **Assets/** (Resources)\
-│ ├── **Images/**\
-│ ├── **Icons/**\
-│\
-├── **Sources/** (Sources code)\
-│ ├── **Models/** (Folder for Models)\
-│ ├───── AccountModel.cs\
-│\
-│ ├── **ViewModels/** (Folder for ViewModels)\
-│ ├───── MainViewModel.cs\
-│\
-│ ├── **Views/** (Folder for Views)\
-│ ├───── ***Main/***\
-│ ├──────── MainWindows.xaml\
-│ ├──────── MainWindows.xaml.cs\
-│\
-│ ├── **Commands/** (Handling command from UI components)\
-│ ├───── RelayCommand.cs\
-│\
-│ ├── **DataAccess/** (Folder for API data handling)\
-│ ├───── **Envs/** (Store environments configuration)\
-│ ├──────── `settings.dev.json`\
-│ ├──────── `settings.product.json`\
-│ ├───── **Local/** (Storage accessToken, refreshToken, language, etc)\
-│ ├───── **Network/** (Call data API)\
-│ ├──────── ApiCaller.cs\
-│ ├── `DataConfiguration.cs (Configuration ApiUrl)`\
-│\
-├── ****Utils/**** (Folder for utilities)\
-│ ├── **NativeWindows/** (Native handling)\
-│ ├──────── WindowsInjection.cs (Native Windows API)\
-│ ├── **Converter/** (Convert value of UI components, Convert response to models, etc)\
-│\
-│ ├── App.xaml (Application entry point UI)\
-│ ├── App.xaml.cs (Application entry point code-behind)\
-│ ├── `JarvisWindows.csproj (Project file)`
-
-## How to build the Project
+## How to build
 ### Prerequisites
 
 Before you begin, make sure you have the following set up:
@@ -49,41 +9,41 @@ Before you begin, make sure you have the following set up:
 - [.NET Framework](https://dotnet.microsoft.com/download/dotnet-framework) (if not using .NET Core or .NET 5+).
 
 ### Steps
-1. **Clone or Download:** Clone this repository to your local machine using Git or download it as a ZIP file.
+1. **Clone or Download:** 
+- Use `Git Clone Command`.
+- Or download the repositoty as a ZIP file.
 
-2. **Open Your WPF Project:**
-- Launch Visual Studio 2022 and open your existing WPF project or create a new one.
+2. **Access NuGet Package Manager:**
+- In Visual Studio, go to:\
+    `Tools` -> `NuGet Package Manager` -> `Manage NuGet Packages for Solution`
 
-3. **Access NuGet Package Manager:**
-- In Visual Studio, go to the "Tools" menu.
-- Select "NuGet Package Manager" and then "Manage NuGet Packages for Solution."
+3. **Browse for Packages:**
+- In the `NuGet Package Manager`, click on the `Browse` tab.
 
-4. **Browse for Packages:**
-- In the NuGet Package Manager, you'll see three tabs: "Browse," "Installed," and "Updates."
-- Click on the "Browse" tab to search for packages.
-
-5. **Search for Packages:**
-- In the "Browse" tab, you can search for the packages you want to install. Type the following package names one by one into the search bar and press Enter:
+4. **Search and install Packages:**
+- In the `Browse` tab, search and install some packages:
      - `MaterialDesignColors`
      - `MaterialDesignThemes`
      - `Microsoft.Extentions.Configuration`
      - `Microsoft.Extentions.Configuration.Json`
 
-5. **Select and Install Packages:**
-- Click on each package in the search results, and then click the "Install" button to add them to your project.
-- Follow the on-screen instructions to complete the installation process.
-
-6. **Configure build environments:**
-- Add more build target:
-   - Right-click on your solution in Visual Studio and select "Configuration Manager" 
-   - Add 2 targets: `dev` and `product`.
+5. **Configure build environments:**
+- Add more build targets:
+   - Right-click on your solution and select `Configuration Manager`. 
+   - Add 2 build targets: `dev` and `product`.
 - Project Configuration:
-   - Right-click on your project in Visual Studio and select "Properties."
-   - In the project properties, navigate to the "Build" tab.
-- Define Configuration Constants:
-   - In the "Conditional compilation symbols" textbox, define constants for each build configuration, such as DEBUG, RELEASE, DEV, and PRODUCT. For the dev configuration, add DEV.
+   - Right-click on your project and select `Properties`.
+   - Navigate to the `Build` tab.
+   - In the `Conditional compilation symbols` textbox, define constants for each build configuration.
+        - For the `dev` configuration add `DEV`.
+        - For the `product` configuration, add `PRODUCT`.
+        - For the `debug` configuration, add `DEBUG`.
+        - For the `release` configuration, add `RELEASE`.
 
-7. **Build and Run:**
-- Build your WPF project to ensure that the packages are correctly referenced.
-- `Chooce the target Build Configuration` and Run your project to make use of the added packages in your application.
+6. **Build and Run:**
+- Build `(Ctrl + B)` the project to ensure that the packages are correctly referenced.
+- Choose the target Build Configuration `(dev, product, ...)` and Run`(F5)` the project.
+
+## Rules
+- When developing, please follow this [Coding Convention](https://hoangtruong.atlassian.net/wiki/spaces/Jarvis/pages/623144/Jarvis+Windows+Coding+Convention).
 
