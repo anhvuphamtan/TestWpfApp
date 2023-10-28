@@ -3,17 +3,10 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>Jarvis_Windows</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Configurations>Debug;Release;Dev;Product</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|AnyCPU'">
-    <DefineConstants>$(DefineConstants);DEV</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Product|AnyCPU'">
-    <DefineConstants>$(DefineConstants);PRODUCT</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -24,10 +17,16 @@
     <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|AnyCPU'">
+    <DefineConstants>$(DefineConstants);DEV</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Product|AnyCPU'">
+    <DefineConstants>$(DefineConstants);PRODUCT</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
-    <Folder Include="Assets\Icons\" />
     <Folder Include="Assets\Images\" />
-    <Folder Include="Sources\Utils\Converter\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,7 +34,6 @@
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>

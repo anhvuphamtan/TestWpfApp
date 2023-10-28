@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace JarvisWindows
+namespace Jarvis_Windows
 {
     /// <summary>
     /// Interaction logic for App.xaml

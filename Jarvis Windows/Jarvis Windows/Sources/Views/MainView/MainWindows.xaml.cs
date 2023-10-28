@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Jarvis_Windows.Sources.Views.MainView;
+using Jarvis_Windows.Sources.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,16 +14,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace JarvisWindows.Views.LoginWindows
+namespace Jarvis_Windows.Sources.Views.MainView
 {
     /// <summary>
-    /// Interaction logic for LoginWindows.xaml
+    /// Interaction logic for MainWindows.xaml
     /// </summary>
-    public partial class LoginWindows : Window
+    public partial class MainWindows : Window
     {
-        public LoginWindows()
+        public MainWindows()
         {
             InitializeComponent();
+            string apiUrl = DataConfiguration.ApiUrl;
+            MainViewModel mainViewModel = new MainViewModel();
+            this.DataContext = mainViewModel;
         }
     }
 }

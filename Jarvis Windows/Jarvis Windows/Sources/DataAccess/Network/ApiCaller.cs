@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JarvisWindows.Sources.DataAccess.Network
+namespace Jarvis_Windows.Sources.DataAccess.Network
 {
     public sealed class ApiCaller
     {

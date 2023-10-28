@@ -1,4 +1,4 @@
-﻿using JarvisWindows.Sources.Commands;
+﻿using Jarvis_Windows.Sources.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace JarvisWindows.Sources.ViewModels
+namespace Jarvis_Windows.Sources.Views.MainView
 {
     public class MainViewModel
     {
         public ICommand LaunchJarvisCommand { get; set; }
 
-        public MainViewModel() 
+        public MainViewModel()
         {
-            LaunchJarvisCommand = new RelayCommand(StartNativeService, CanStartNativeService);
+            LaunchJarvisCommand = new BaseCommand(StartNativeService, CanStartNativeService);
         }
 
         private bool CanStartNativeService(object obj)

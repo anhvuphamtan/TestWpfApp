@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JarvisWindows.Sources.ViewModels
+namespace Jarvis_Windows.Sources.Utils.Converter
 {
-    internal class AccountViewModel
+    internal class ModelResponseConverter
     {
     }
 }

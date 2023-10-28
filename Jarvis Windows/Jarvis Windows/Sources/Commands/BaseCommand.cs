@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace JarvisWindows.Sources.Commands
+namespace Jarvis_Windows.Sources.Commands
 {
-    public class RelayCommand : ICommand
+    public class BaseCommand : ICommand
     {
         public event EventHandler? CanExecuteChanged;
 
@@ -15,7 +15,7 @@ namespace JarvisWindows.Sources.Commands
         private Predicate<object> _CanExcute { get; set; }
 
 
-        public RelayCommand(Action<object> ExcuteMethod, Predicate<object> CanExcuteMethod)
+        public BaseCommand(Action<object> ExcuteMethod, Predicate<object> CanExcuteMethod)
         {
 
             _Excute = ExcuteMethod;

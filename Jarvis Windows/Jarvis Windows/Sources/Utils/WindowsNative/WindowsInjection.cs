@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace JarvisWindows.Sources.Utils.WindowsNative
 {
-    internal class WindowsInjection
+    public class WindowsInjection
     {
+        public WindowsInjection()
+        {
+            
+        }
+
+        public IntPtr GetForegroundWindow() {  return IntPtr.Zero; }
     }
 }
+

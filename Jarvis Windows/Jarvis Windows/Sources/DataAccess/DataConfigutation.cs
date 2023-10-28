@@ -2,14 +2,13 @@
 using System;
 using System.IO;
 
-namespace JarvisWindows.Sources.DataAccess
+namespace Jarvis_Windows.Sources.DataAccess
 {
     public static class DataConfiguration
     {
         #region Private Fields to get Configuration
         private static IConfigurationRoot GetConfiguration()
         {
-            // Determine the environment based on the conditional compilation symbols
             string environment;
             #if DEBUG
             environment = "dev";
@@ -25,7 +24,7 @@ namespace JarvisWindows.Sources.DataAccess
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"Envs/settings.{environment}.json", true, true);
+                .AddJsonFile($"../../AppSettings/Envs/settings.{environment}.json", true, true);
             return builder.Build();
         }
         #endregion

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JarvisWindows.Sources.Models
+namespace Jarvis_Windows.Sources.Models
 {
-    internal class Account
+    internal class BaseModel
     {
     }
 }
