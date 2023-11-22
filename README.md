@@ -24,8 +24,9 @@ Before you begin, make sure you have the following set up:
 - In the `Browse` tab, search and install some packages:
      - `MaterialDesignColors`
      - `MaterialDesignThemes`
-     - `Microsoft.Extentions.Configuration`
-     - `Microsoft.Extentions.Configuration.Json`
+     - `Microsoft.Extensions.Configuration`
+     - `Microsoft.Extensions.Configuration.Json`
+     - `Microsoft.Extensions.DependencyInjection`
 
 5. **Configure build environments:**
 - Add more build targets:
