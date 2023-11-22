@@ -1,0 +1,63 @@
+﻿<Window x:Class="Jarvis_Windows.Sources.MVVM.Views.MainView.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MainView"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Title="MainView" Height="360" Width="600">
+    <Border CornerRadius="15" Background="#EBEBEB" BorderBrush="White" BorderThickness="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="4.8*"/>
+                <RowDefinition Height="0.2*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0 10" VerticalAlignment="Top">
+                <Image DockPanel.Dock="Left" Source="../../../../Assets/Images/jarvis_logo.png" Margin="10 0" Width="35" Height="35">
+                    <Image.Effect>
+                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
+                    </Image.Effect>
+                </Image>
+
+                <TextBlock 
+                    DockPanel.Dock="Left" 
+                    VerticalAlignment="Center"
+                    FontFamily="Iner"
+                    FontSize="20"
+                    FontWeight="Bold"
+                    Foreground="#275CB0">Jarvis Assistant</TextBlock>
+
+                <Button
+                    DockPanel.Dock="Right"
+                    x:Name="btnCloseIntroduction"
+                    Width="20"
+                    Height="20"
+                    Padding="0"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Margin="0 0 10 0"
+                    Click="btnCloseIntroduction_Click"
+                    Foreground="#303030">
+                    <Button.Effect>
+                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
+                    </Button.Effect>
+                    <Button.Content>
+                        <Image Source="../../../../Assets/Images/cross.png"/>
+                    </Button.Content>
+                </Button>
+            </DockPanel>
+
+            <Grid Grid.Row="1">
+                <ContentControl Content="{Binding NavigationService.CurrentView}"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

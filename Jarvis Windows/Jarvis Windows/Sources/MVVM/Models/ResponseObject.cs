@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jarvis_Windows.Sources.Models
+namespace Jarvis_Windows.Sources.MVVM.Models
 {
-    internal class BaseModel
+    internal class ResponseObject
     {
     }
 }

@@ -1,6 +1,4 @@
-﻿using Jarvis_Windows.Sources.Views.MainView;
-using Jarvis_Windows.Sources.DataAccess;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,21 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Jarvis_Windows.Sources.Views.MainView
+namespace Jarvis_Windows.Sources.MVVM.Views.GuidelineView
 {
     /// <summary>
-    /// Interaction logic for MainWindows.xaml
+    /// Interaction logic for GuidelineView.xaml
     /// </summary>
-    public partial class MainWindows : Window
+    public partial class GuidelineView : UserControl
     {
-        public MainWindows()
+        public GuidelineView()
         {
             InitializeComponent();
-            string apiUrl = DataConfiguration.ApiUrl;
-            MainViewModel mainViewModel = new MainViewModel();
-            this.DataContext = mainViewModel;
         }
     }
 }

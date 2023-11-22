@@ -24,7 +24,7 @@ namespace Jarvis_Windows.Sources.DataAccess
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"../../AppSettings/Envs/settings.{environment}.json", true, true);
+                .AddJsonFile($"AppSettings/Envs/settings.{environment}.json", true, true);
             return builder.Build();
         }
         #endregion

@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Configurations>Debug;Release;Dev;Product</Configurations>
+    <ApplicationIcon>Assets\Icons\jarvis_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -26,7 +27,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\Images\" />
+    <None Remove="AppSettings\Envs\settings.dev.json" />
+    <None Remove="AppSettings\Envs\settings.product.json" />
+    <None Remove="Assets\Icons\jarvis_icon.png" />
+    <None Remove="Assets\Images\cross.png" />
+    <None Remove="Assets\Images\jarvis_logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="UIAutomationClient">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>0</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>944de083-8fb8-45cf-bcb7-c477acb2f897</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Accessibility">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>1</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>1ea4dbf0-3c3b-11cf-810c-00aa00389b71</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppSettings\Envs\settings.dev.json" />
+    <Content Include="AppSettings\Envs\settings.product.json" />
+    <Content Include="Assets\Icons\jarvis_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +66,15 @@
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\cross.png" />
+    <Resource Include="Assets\Images\jarvis_logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

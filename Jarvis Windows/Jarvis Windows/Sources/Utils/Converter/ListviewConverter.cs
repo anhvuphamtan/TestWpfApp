@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jarvis_Windows.Sources.Utils.Converter
 {
-    internal class ModelResponseConverter
+    internal class ListviewConverter
     {
     }
 }

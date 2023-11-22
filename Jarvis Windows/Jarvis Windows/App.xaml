@@ -2,15 +2,17 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Jarvis_Windows"
-             StartupUri="Sources/Views/MainView/MainWindows.xaml">
+             xmlns:guidelineView="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.GuidelineView"
+             xmlns:introductionView="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.IntroductionView"
+             xmlns:viewModel="clr-namespace:Jarvis_Windows.Sources.MVVM.ViewModels"
+             Startup="OnStartup">
     <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:IntroductionViewModel}">
+            <introductionView:IntroductionView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type TypeName=viewModel:GuidelineViewModel}">
+            <guidelineView:GuidelineView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>
