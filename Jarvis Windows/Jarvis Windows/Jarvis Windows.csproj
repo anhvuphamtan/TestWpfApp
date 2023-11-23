@@ -35,6 +35,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Sources\MVVM\Views\Styles\JarvisStyle.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="UIAutomationClient">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -75,6 +79,7 @@
     <Resource Include="Assets\Images\jarvis_logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Sources\MVVM\Views\Styles\JarvisStyle.xaml" />
   </ItemGroup>
 
 </Project>

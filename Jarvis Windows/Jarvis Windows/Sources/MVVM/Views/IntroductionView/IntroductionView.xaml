@@ -6,6 +6,14 @@
              xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.IntroductionView"
              mc:Ignorable="d" 
              d:DesignHeight="260" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Jarvis Windows;component/Sources/MVVM/Views/Styles/JarvisStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <StackPanel Orientation="Horizontal">
             <Border Margin="20 0" Background="White" BorderThickness="1" CornerRadius="5" Width="260" Height="260">
@@ -25,13 +33,14 @@
             <StackPanel Orientation="Vertical" Width="280" Height="150">
                 <Border Width="280" Height="60" Margin="0 20 0 10">
                     <Button
-             Command="{Binding NavigateToGuidelineCommand}"
-             Foreground="White"
-             Width="180"
-             Height="60"
-             FontSize="25"
-             Content="Start Guide"
-             Background="#00428F"/>
+                         Command="{Binding NavigateToGuidelineCommand}"
+                         Foreground="White"
+                         Width="180"
+                         Height="60"
+                         FontSize="25"
+                         Content="Start Guide"
+                         Background="#00428F"
+                         Style="{StaticResource JarvisPrimaryButton}"/>
                 </Border>
                 <TextBlock Text="Visit Jarvis Website" FontSize="18" TextAlignment="Right" Width="180" FontWeight="Bold" TextDecorations="Underline">
 
