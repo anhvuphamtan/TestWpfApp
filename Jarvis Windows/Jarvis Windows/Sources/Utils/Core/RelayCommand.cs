@@ -9,6 +9,9 @@ namespace Jarvis_Windows.Sources.Utils.Core;
 
 public class RelayCommand : ICommand
 {
+    private RelayCommand? executeReviseCommand;
+    private Func<object, bool> value;
+
     public event EventHandler? CanExecuteChanged;
 
     private Action<object> _Excute { get; set; }
@@ -18,6 +21,12 @@ public class RelayCommand : ICommand
     {
         _Excute = ExcuteMethod;
         _CanExcute = CanExcuteMethod;
+    }
+
+    public RelayCommand(RelayCommand? executeReviseCommand, Func<object, bool> value)
+    {
+        this.executeReviseCommand = executeReviseCommand;
+        this.value = value;
     }
 
     public event EventHandler CanExecuteChange

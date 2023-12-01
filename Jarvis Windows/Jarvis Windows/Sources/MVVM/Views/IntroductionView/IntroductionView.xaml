@@ -42,8 +42,14 @@
                          Background="#00428F"
                          Style="{StaticResource JarvisPrimaryButton}"/>
                 </Border>
-                <TextBlock Text="Visit Jarvis Website" FontSize="18" TextAlignment="Right" Width="180" FontWeight="Bold" TextDecorations="Underline">
+                <!--<TextBlock Text="Visit Jarvis Website" FontSize="18" TextAlignment="Right" Width="180" FontWeight="Bold" TextDecorations="Underline">
 
+                </TextBlock>-->
+
+                <TextBlock FontSize="15" TextAlignment="Right" Width="180" FontWeight="Bold">
+                    <Hyperlink NavigateUri="https://jarvis.cx/" RequestNavigate="Hyperlink_RequestNavigate">
+                        <TextBlock Text="Visit Jarvis Website" TextDecorations="Underline"/>
+                    </Hyperlink>
                 </TextBlock>
             </StackPanel>
         </StackPanel>

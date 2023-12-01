@@ -27,11 +27,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppSettings\Configs\languages_supported.json" />
     <None Remove="AppSettings\Envs\settings.dev.json" />
     <None Remove="AppSettings\Envs\settings.product.json" />
     <None Remove="Assets\Icons\jarvis_icon.png" />
     <None Remove="Assets\Images\cross.png" />
+    <None Remove="Assets\Images\guideline1.png" />
+    <None Remove="Assets\Images\guideline2.png" />
     <None Remove="Assets\Images\jarvis_logo.png" />
+    <None Remove="Assets\Images\navigate_next.png" />
+    <None Remove="Assets\Images\pencil.png" />
+    <None Remove="Assets\Images\scissors.png" />
+    <None Remove="Assets\Images\translate_img.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +67,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="AppSettings\Configs\languages_supported.json" />
     <Content Include="AppSettings\Envs\settings.dev.json" />
     <Content Include="AppSettings\Envs\settings.product.json" />
     <Content Include="Assets\Icons\jarvis_icon.ico" />
@@ -76,9 +84,15 @@
 
   <ItemGroup>
     <Resource Include="Assets\Images\cross.png" />
+    <Resource Include="Assets\Images\guideline1.png" />
+    <Resource Include="Assets\Images\guideline2.png" />
     <Resource Include="Assets\Images\jarvis_logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Images\navigate_next.png" />
+    <Resource Include="Assets\Images\pencil.png" />
+    <Resource Include="Assets\Images\scissors.png" />
+    <Resource Include="Assets\Images\translate_img.png" />
     <Resource Include="Sources\MVVM\Views\Styles\JarvisStyle.xaml" />
   </ItemGroup>
 

@@ -24,5 +24,19 @@ namespace Jarvis_Windows.Sources.MVVM.Views.IntroductionView
         {
             InitializeComponent();
         }
+
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // Xử lý lỗi nếu có
+            }
+            e.Handled = true;
+        }
     }
 }

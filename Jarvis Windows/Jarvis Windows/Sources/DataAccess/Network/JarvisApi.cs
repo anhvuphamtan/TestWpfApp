@@ -15,7 +15,8 @@ public sealed class JarvisApi
 
     private static readonly HttpClient client = new();
     private static readonly JarvisApi instance = new();
-    private static readonly string? apiUrl = DataConfiguration.ApiUrl;
+    //private static readonly string? apiUrl = DataConfiguration.ApiUrl;
+    private static readonly string? apiUrl = "https://api.jarvis.fan/ai-ask/";
 
     private JarvisApi()
     {
@@ -49,18 +50,20 @@ public sealed class JarvisApi
 
     public static async Task<string?> TranslateHandler(String content, String lang)
     {
-        throw new NotImplementedException();
+        var requestBody = $"{{\"content\":\"{content}\",\"lang\":\"{lang}\"}}";
+        return await ApiHandler(requestBody, _translateEndPoint);
     }
-
 
     public static async Task<string?> ShortenHandler(String content)
     {
-        throw new NotImplementedException();
-    }
+        var requestBody = $"{{\"content\":\"{content}\"}}";
+        return await ApiHandler(requestBody, _shortenEndPoint);
 
+    }
 
     public static async Task<string?> ReviseHandler(String content)
     {
-        throw new NotImplementedException();
+        var requestBody = $"{{\"content\":\"{content}\"}}";
+        return await ApiHandler(requestBody, _reviseEndPoint);
     }
 }
