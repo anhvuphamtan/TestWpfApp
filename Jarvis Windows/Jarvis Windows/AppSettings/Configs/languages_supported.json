@@ -1,12 +1,12 @@
 ﻿[
   {
-    "Name": "Vietnamese",
-    "Code": "vi",
-    "Description": "Tiếng Việt"
-  },
-  {
     "Name": "English",
     "Code": "en",
     "Description": "English"
+  },
+  {
+    "Name": "Vietnamese",
+    "Code": "vi",
+    "Description": "Tiếng Việt"
   }
 ]

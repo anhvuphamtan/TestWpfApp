@@ -82,8 +82,8 @@
                    VerticalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.Y}"
                    HorizontalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.X}"
                    AllowsTransparency="True" 
-                   IsOpen="{Binding PopupDictionaryService.IsShowMenuOperations}" 
-                   Width="300" Height="200">
+                   IsOpen="{Binding PopupDictionaryService.IsShowMenuOperations}"
+                   Width="400" Height="165">
                 <menuOperation:MenuOperatorsView/>
             </Popup>
             

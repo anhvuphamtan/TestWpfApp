@@ -83,8 +83,8 @@ public class PopupDictionaryService : ObserveralObject
                 visualPos.X = visualPos.X - 30 / 2;
                 visualPos.Y = visualPos.Y - 30 / 2;
                 JarvisActionPosition = visualPos;
-                visualPos.X = visualPos.X - 300;
-                visualPos.Y = visualPos.Y - 30 / 2 - 200;
+                visualPos.X = visualPos.X - 200;
+                visualPos.Y = visualPos.Y - 180;
                 MenuOperationsPosition = visualPos;
             }    
         }));

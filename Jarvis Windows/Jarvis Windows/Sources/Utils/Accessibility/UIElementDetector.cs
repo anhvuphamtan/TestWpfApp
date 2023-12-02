@@ -49,11 +49,9 @@ public class UIElementDetector
 
         ///FIXME: Crashing Not Available Element
         if (newFocusElement != null
-            && newFocusElement.Current.IsKeyboardFocusable
-            && newFocusElement.Current.HasKeyboardFocus
-            && (newFocusElement.Current.LocalizedControlType.Equals("edit") || newFocusElement.Current.LocalizedControlType.Equals("group")
-            || newFocusElement.Current.LocalizedControlType.Equals("custom"))
-            && newFocusElement.Current.ControlType.Equals(ControlType.Edit))
+            && (newFocusElement.Current.LocalizedControlType.Equals("edit") 
+            || newFocusElement.Current.LocalizedControlType.Equals("document")
+            || newFocusElement.Current.LocalizedControlType.Equals("group")))
         {
             _focusingElement = newFocusElement;
             SubscribeToRectBoundingChanged();
