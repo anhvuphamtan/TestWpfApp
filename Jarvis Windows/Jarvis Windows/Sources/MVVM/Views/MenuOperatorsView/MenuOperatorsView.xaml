@@ -11,6 +11,31 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Jarvis Windows;component/Sources/MVVM/Views/Styles/JarvisStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="SnapsToDevicePixels" Value="true"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                            <Border Name="Border"
+                      Padding="2"
+                      SnapsToDevicePixels="true">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsHighlighted" Value="true">
+                                    <Setter TargetName="Border" Property="Background" Value="#FF4F4F4F"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Foreground" Value="#888888"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Border Background="#EBEBEB" CornerRadius="10" BorderBrush="White" BorderThickness="2">
@@ -65,12 +90,12 @@
                     </Button.Content>
                 </Button>
             </DockPanel>
-            
+
             <WrapPanel>
                 <!--<Image Source="../../../../Assets/Images/translate_img.png" Width="15" Height="15" Margin="5 0"/>-->
                 <TextBlock Margin="20 0" Width="265" Background="#CCCCCC" FontWeight="Bold">Content</TextBlock>
 
-                    <!--<ComboBox Width="180" Height="35" Margin="20 10" Background="Transparent" >
+                <!--<ComboBox Width="180" Height="35" Margin="20 10" Background="Transparent" >
                         <ComboBoxItem IsSelected="True">
                             <WrapPanel>
                                 <Button Width="30" Height="30" >
@@ -102,32 +127,11 @@
                             Style="{StaticResource JarvisOperationButton}"
                             Command="{Binding TranslateCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="../../../../Assets/Images/translate_img.png" Width="20" Height="20" VerticalAlignment="Center"/>
+                            <Image Margin="5" Source="../../../../Assets/Images/translate_img.png" Width="20" Height="20" VerticalAlignment="Center"/>
 
-                            <TextBlock Text="Translate to English" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Translate to " VerticalAlignment="Center"/>
 
-                            <ComboBox Name="languageComboBox" ItemsSource="{Binding Languages}" DisplayMemberPath="Name" SelectionChanged="languageComboBox_SelectionChanged"  Width="25" Height="25" Margin="5 0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                <!--<ComboBox.Style>    
-                                    <Style TargetType="ComboBox">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="ComboBox">
-                                                    <Grid Background="Transparent">
-                                                        <ContentPresenter/>
-                                                        <Button Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
-                                                            <Button.Content>
-                                                                <Image Source="../../../../Assets/Images/navigate_next.png" Width="16" Height="16"/>
-                                                            </Button.Content>
-                                                        </Button>
-                                                    </Grid>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ComboBox.Style>-->
-                                <!--<ComboBox.ItemTemplate>
-                                    --><!-- ... Code của ItemTemplate --><!--
-                                </ComboBox.ItemTemplate>-->
+                            <ComboBox SelectionChanged="languageComboBox_SelectionChanged" Style="{StaticResource JarvisComboBox}" Name="languageComboBox" ItemsSource="{Binding Languages}" DisplayMemberPath="Name">
                             </ComboBox>
                         </StackPanel>
                     </Button>
