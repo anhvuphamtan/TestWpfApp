@@ -30,6 +30,14 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
         public MenuOperatorsView()
         {
             InitializeComponent();
+
+            languageComboBox.Loaded += (sender, e) =>
+            {
+                if (languageComboBox.Items.Count > 0)
+                {
+                    languageComboBox.SelectedIndex = 0;
+                }
+            };
         }
 
         public String SelectedLanguage

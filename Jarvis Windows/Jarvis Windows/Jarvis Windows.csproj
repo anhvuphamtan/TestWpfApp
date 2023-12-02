@@ -31,6 +31,7 @@
     <None Remove="AppSettings\Envs\settings.dev.json" />
     <None Remove="AppSettings\Envs\settings.product.json" />
     <None Remove="Assets\Icons\jarvis_icon.png" />
+    <None Remove="Assets\Images\close.png" />
     <None Remove="Assets\Images\cross.png" />
     <None Remove="Assets\Images\guideline1.png" />
     <None Remove="Assets\Images\guideline2.png" />
@@ -83,6 +84,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Images\close.png" />
     <Resource Include="Assets\Images\cross.png" />
     <Resource Include="Assets\Images\guideline1.png" />
     <Resource Include="Assets\Images\guideline2.png" />

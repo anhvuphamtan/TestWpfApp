@@ -78,7 +78,7 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            _popupDictionaryService.ShowMenuOperations(false);
+            //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, _targetLanguage);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
@@ -90,7 +90,7 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            _popupDictionaryService.ShowMenuOperations(false);
+            //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.ReviseHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
@@ -102,7 +102,7 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            _popupDictionaryService.ShowMenuOperations(false);
+            //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.ShortenHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
