@@ -5,6 +5,10 @@ using System.Windows;
 using Jarvis_Windows.Sources.Utils.Services;
 using Jarvis_Windows.Sources.Utils.WindowsAPI;
 using System.Windows.Media;
+using System.Linq;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Windows.Automation.Peers;
 
 namespace Jarvis_Windows.Sources.Utils.Accessibility;
 
@@ -50,8 +54,7 @@ public class UIElementDetector
         ///FIXME: Crashing Not Available Element
         if (newFocusElement != null
             && (newFocusElement.Current.LocalizedControlType.Equals("edit") 
-            || newFocusElement.Current.LocalizedControlType.Equals("document")
-            || newFocusElement.Current.LocalizedControlType.Equals("group")))
+            || newFocusElement.Current.LocalizedControlType.Equals("document")))
         {
             _focusingElement = newFocusElement;
             SubscribeToRectBoundingChanged();
@@ -60,6 +63,19 @@ public class UIElementDetector
             _popupDictionaryService.ShowMenuOperations(false);
             _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
             _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
+        }
+        else
+        {
+            IntPtr currentAppHandle = NativeUser32API.GetForegroundWindow();
+            AutomationElement foregroundApp = AutomationElement.FromHandle(currentAppHandle);
+            if (foregroundApp != null)
+            {
+                if (foregroundApp.Current.Name.Equals("Jarvis MainView"))
+                    return;
+            }
+
+            _popupDictionaryService.ShowJarvisAction(false);
+            _popupDictionaryService.ShowMenuOperations(false);
         }
     }
 
@@ -110,7 +126,7 @@ public class UIElementDetector
 
         AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
         Automation.RemoveAutomationPropertyChangedEventHandler(_focusingElement, propertyChangedHandler);
-    }
+    }   
 
     public void SetValueForFocusingEditElement(String? value)
     {
