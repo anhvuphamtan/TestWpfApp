@@ -74,7 +74,7 @@
                    HorizontalOffset="{Binding PopupDictionaryService.JarvisActionPosition.X}" 
                    AllowsTransparency="True" 
                    IsOpen="{Binding PopupDictionaryService.IsShowJarvisAction}"
-                   Width="30" Height="30">
+                   Width="22" Height="22">
                 <jarvisAction:JarvisActionView/>
             </Popup>
 
