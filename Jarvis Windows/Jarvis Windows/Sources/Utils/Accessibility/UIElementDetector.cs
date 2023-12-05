@@ -68,9 +68,20 @@ public class UIElementDetector
         Point placementPoint = new Point(0, 0);
         if (_focusingElement != null)
         {
-            Rect elementRectBounding = _focusingElement.Current.BoundingRectangle;
-            placementPoint.X = elementRectBounding.Left + elementRectBounding.Width * 0.96;
-            placementPoint.Y = elementRectBounding.Top + elementRectBounding.Height * 0.5;
+            try
+            {
+                Rect elementRectBounding = _focusingElement.Current.BoundingRectangle;
+                placementPoint.X = elementRectBounding.Left + elementRectBounding.Width;
+                placementPoint.Y = elementRectBounding.Top + elementRectBounding.Height * 0.5;
+            }
+            catch (ElementNotAvailableException ex)
+            {
+                Console.WriteLine($"Element is not available: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
         return placementPoint;
     }
@@ -118,36 +129,20 @@ public class UIElementDetector
         }
     }
 
-    public void SetValueForEditElement(AutomationElement element, string text)
-    {
-        try
-        {
-            object? patternObj = element.GetCurrentPattern(ValuePattern.Pattern);
-            if (patternObj != null)
-            {
-                ValuePattern? valuePattern = patternObj as ValuePattern;
-                if (valuePattern != null)
-                {
-                    valuePattern.SetValue(text);
-                }
-            }
-
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
     public string GetTextFromFocusingEditElement()
     {
         try
         {
             if (_focusingElement != null)
             {
-                ValuePattern? valuePattern = _focusingElement.GetCurrentPattern(ValuePattern.Pattern) as ValuePattern;
-                if (valuePattern != null)
-                    return valuePattern.Current.Value;
+                ValuePattern? valuePattern = null;
+                object valuePatternObj;
+                if (_focusingElement.TryGetCurrentPattern(ValuePattern.Pattern, out valuePatternObj))
+                {
+                    valuePattern = valuePatternObj as ValuePattern;
+                    if (valuePattern != null)
+                        return valuePattern.Current.Value;
+                }
             }
         }
         catch (Exception)

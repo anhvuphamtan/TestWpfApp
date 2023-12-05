@@ -80,8 +80,8 @@ public class PopupDictionaryService : ObserveralObject
             if (source != null)
             {
                 visualPos = source.CompositionTarget.TransformFromDevice.Transform(new Point(systemPoint.X, systemPoint.Y));
-                visualPos.X = visualPos.X - 30 / 2;
-                visualPos.Y = visualPos.Y - 30 / 2;
+                visualPos.X = visualPos.X - 22;
+                visualPos.Y = visualPos.Y - 22 / 2;
                 JarvisActionPosition = visualPos;
                 visualPos.X = visualPos.X - 200;
                 visualPos.Y = visualPos.Y - 180;
