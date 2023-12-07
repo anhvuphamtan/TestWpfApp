@@ -13,6 +13,17 @@ public class PopupDictionaryService : ObserveralObject
     private bool _isShowMenuOperations; 
     private Point _jarvisActionPosition;
     private Point _menuOperationsPosition;
+    private static String? _targetLanguage;
+
+    public static  String TargetLangguage
+    {
+        get { return _targetLanguage; }
+        set
+        {
+            _targetLanguage = value;
+        }
+    }
+
 
     public bool IsShowJarvisAction
     {
@@ -73,7 +84,6 @@ public class PopupDictionaryService : ObserveralObject
     {
         Point visualPos = new Point();
 
-        //Access to UI thread
         Application.Current.Dispatcher.BeginInvoke(new Action(() =>
         {
             PresentationSource source = PresentationSource.FromVisual(Application.Current.MainWindow);
@@ -94,7 +104,6 @@ public class PopupDictionaryService : ObserveralObject
 
     public void UpdateJarvisActionPosition(Point systemPoint)
     {
-        //TODO: Convert system point to visual point
         Point visualPoint = ConvertFromSystemCoorToVisualCoord(systemPoint);
         JarvisActionPosition = visualPoint;
     }
@@ -106,7 +115,6 @@ public class PopupDictionaryService : ObserveralObject
 
     public void UpdateMenuOperationsPosition(Point systemPoint)
     {
-        //TODO: Convert system point to visual point
         Point visualPoint = ConvertFromSystemCoorToVisualCoord(systemPoint);
         MenuOperationsPosition = visualPoint;
     }

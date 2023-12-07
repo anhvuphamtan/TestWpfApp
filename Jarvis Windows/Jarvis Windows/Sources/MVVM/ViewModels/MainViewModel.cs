@@ -21,7 +21,6 @@ public class MainViewModel : ViewModelBase
     private PopupDictionaryService _popupDictionaryService;
     private UIElementDetector _uIElementDetector;
     public List<Language> Languages { get; set; }
-    private String _targetLanguage = "English";
 
     public RelayCommand ShowMenuOperationsCommand { get; set; }
     public RelayCommand HideMenuOperationsCommand { get; set; }
@@ -80,8 +79,8 @@ public class MainViewModel : ViewModelBase
         {
             //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, _targetLanguage);
-            UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
+            var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+            UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
         }
         catch { }
     }

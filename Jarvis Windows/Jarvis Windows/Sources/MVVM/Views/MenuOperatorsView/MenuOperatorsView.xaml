@@ -17,19 +17,15 @@
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <LinearGradientBrush.GradientStops>
-                    <GradientStop Offset="1" Color="#D3E3F1" />
-                    <GradientStop Offset="0" Color="#D3E3FF" />
+                    <GradientStop Offset="0.05" Color="#FFFFFF" />
+                    <GradientStop Offset="1" Color="#D3E3FF" />
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
         </Border.Background>
 
         <DockPanel Background="Transparent">
             <DockPanel DockPanel.Dock="Top" LastChildFill="False" Margin="10 10 10 0" VerticalAlignment="Top">
-                <Image DockPanel.Dock="Left" Source="../../../../Assets/Images/jarvis_logo.png" Margin="0 0 5 0" Width="20" Height="20">
-                    <!--<Image.Effect>
-                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
-                    </Image.Effect>-->
-                </Image>
+                <Image DockPanel.Dock="Left" Source="../../../../Assets/Images/jarvis_logo.png" Margin="0 0 5 0" Width="20" Height="20"/>
 
                 <TextBlock 
                     DockPanel.Dock="Left" 
@@ -40,18 +36,6 @@
                     Foreground="#275CB0">
                     Jarvis
                 </TextBlock>
-
-                <!--<TextBlock 
-                    DockPanel.Dock="Left" 
-                    VerticalAlignment="Center"
-                    FontFamily="Iner"
-                    FontSize="14"
-                    Margin="5 0"
-                    Opacity="0.5"
-                    FontWeight="Bold"
-                    Foreground="#303030">
-                    Beta
-                </TextBlock>-->
 
                 <Button
                     DockPanel.Dock="Right"
@@ -66,9 +50,6 @@
                     Margin="0 0 5 0"
                     Command="{Binding HideMenuOperationsCommand}"
                     Foreground="#303030">
-                    <!--<Button.Effect>
-                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
-                    </Button.Effect>-->
                     <Button.Content>
                         <Image Source="../../../../Assets/Images/close.png"/>
                     </Button.Content>
@@ -76,10 +57,7 @@
             </DockPanel>
 
             <WrapPanel Height="88">
-                <!--<Image Source="../../../../Assets/Images/translate_img.png" Width="15" Height="15" Margin="5 0"/>-->
-                <!--<TextBlock Margin="20 0" Width="265" Background="#CCCCCC" FontWeight="Bold">Content</TextBlock>-->
-
-                <Border CornerRadius="10" Background="#FFFFFF" Margin="10 0 10 10">
+                <Border BorderBrush="#EEEEEE" BorderThickness="1"  CornerRadius="10" Background="#FFFFFF" Margin="10 0 10 10">
                     <Button Width="210" Height="36"     
                             Style="{StaticResource JarvisOperationButton}"
                             Command="{Binding TranslateCommand}">
@@ -88,13 +66,13 @@
 
                             <TextBlock Text="Translate to " VerticalAlignment="Center"/>
 
-                            <ComboBox Width="95" SelectionChanged="languageComboBox_SelectionChanged" Style="{StaticResource JarvisComboBox}" Name="languageComboBox" ItemsSource="{Binding Languages}" DisplayMemberPath="Name">
+                            <ComboBox Width="95" SelectionChanged="languageComboBox_SelectionChanged" Style="{StaticResource JarvisComboBox}" Name="languageComboBox" ItemsSource="{Binding Languages}" DisplayMemberPath="Value">
                             </ComboBox>
                         </StackPanel>
                     </Button>
                 </Border>
 
-                <Border Height="36" CornerRadius="10" Background="#FFFFFF" Margin="0 0 10 10">
+                <Border Height="36" CornerRadius="10" BorderBrush="#EEEEEE" BorderThickness="1" Background="#FFFFFF" Margin="0 0 10 10">
                     <Button Width="118" Height="36" 
                             Style="{StaticResource JarvisOperationButton}"
                             Command="{Binding ReviseCommand}">
@@ -106,7 +84,7 @@
                     </Button>
                 </Border>
 
-                <Border Margin="10 0" CornerRadius="10" Background="#FFFFFF">
+                <Border BorderBrush="#EEEEEE" BorderThickness="1" Margin="10 0" CornerRadius="10" Background="#FFFFFF">
                     <Button Width="121" Height="36"
                             Style="{StaticResource JarvisOperationButton}"
                             Command="{Binding ShortenCommand}">

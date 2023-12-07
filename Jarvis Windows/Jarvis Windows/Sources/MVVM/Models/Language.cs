@@ -8,8 +8,7 @@ namespace Jarvis_Windows.Sources.MVVM.Models
 {
     public class Language
     {
-        public String Name { get; set; }
-        private String Code { get; set; }
-        private String Description { get; set; }
+        public String Value { get; set; }
+        private String Label { get; set; }
     }
 }

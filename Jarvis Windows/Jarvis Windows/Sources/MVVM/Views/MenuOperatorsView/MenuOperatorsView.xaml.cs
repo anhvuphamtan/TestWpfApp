@@ -1,5 +1,6 @@
 ﻿using Jarvis_Windows.Sources.MVVM.Models;
 using Jarvis_Windows.Sources.Utils.Core;
+using Jarvis_Windows.Sources.Utils.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,10 +24,9 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
     /// <summary>
     /// Interaction logic for MenuOperatorsView.xaml
     /// </summary>
-    public partial class MenuOperatorsView : UserControl, INotifyPropertyChanged
+    public partial class MenuOperatorsView : UserControl
     {
-        private String _selectedLanguage;
-
+        private int _languageSelectedIndex = 0;
         public MenuOperatorsView()
         {
             InitializeComponent();
@@ -35,27 +35,10 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
             {
                 if (languageComboBox.Items.Count > 0)
                 {
-                    languageComboBox.SelectedIndex = 0;
+                    languageComboBox.SelectedIndex = _languageSelectedIndex;
                 }
             };
         }
-
-        public String SelectedLanguage
-        {
-            get { return _selectedLanguage; }
-            set
-            {
-                _selectedLanguage = value;
-                OnPropertyChanged();
-            }
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
 
         private void languageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -63,8 +46,8 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
             {
                 if (comboBox.SelectedItem != null)
                 {
-                    string selectedItemContent = ((Language)comboBox.SelectedItem).Name;
-                    Debug.WriteLine($"{selectedItemContent}");
+                    PopupDictionaryService.TargetLangguage = ((Language)comboBox.SelectedItem).Value;
+                    _languageSelectedIndex = comboBox.SelectedIndex;
                 }
             }
         }
