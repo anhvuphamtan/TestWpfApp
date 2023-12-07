@@ -71,6 +71,9 @@ public class MainViewModel : ViewModelBase
 
         string jsonContent = File.ReadAllText("../../../Appsettings/Configs/languages_supported.json");
         Languages = JsonConvert.DeserializeObject<List<Language>>(jsonContent);
+
+        //Register Acceccibility service
+        UIElementDetector.SubscribeToElementFocusChanged();
     }
 
     private async void ExecuteTranslateCommand(object obj)
