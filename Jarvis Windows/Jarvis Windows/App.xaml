@@ -2,17 +2,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Jarvis_Windows"
-             xmlns:guidelineView="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.GuidelineView"
-             xmlns:introductionView="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.IntroductionView"
+             
+             xmlns:mainView="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MainView"
              xmlns:viewModel="clr-namespace:Jarvis_Windows.Sources.MVVM.ViewModels"
              Startup="OnStartup">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type TypeName=viewModel:IntroductionViewModel}">
-            <introductionView:IntroductionView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type TypeName=viewModel:GuidelineViewModel}">
-            <guidelineView:GuidelineView/>
+        <DataTemplate DataType="{x:Type TypeName=viewModel:MainViewModel}">
+            <mainView:MainView/>
         </DataTemplate>
     </Application.Resources>
 </Application>

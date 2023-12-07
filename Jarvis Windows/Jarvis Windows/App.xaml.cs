@@ -28,8 +28,7 @@ public partial class App : Application
         {
             DataContext = proider.GetRequiredService<MainViewModel>()
         });
-        services.AddSingleton<IntroductionViewModel>();
-        services.AddSingleton<GuidelineViewModel>();
+        
         services.AddSingleton<JarvisActionViewModel>(provider => new JarvisActionViewModel
         {
             PopupDictionaryService = _serviceProvider.GetRequiredService<PopupDictionaryService>()
@@ -43,7 +42,6 @@ public partial class App : Application
         MainView mainView = _serviceProvider.GetRequiredService<MainView>();
         mainView.Show();
 
-        _serviceProvider.GetRequiredService<INavigationService>().NavigateTo<IntroductionViewModel>();
         _serviceProvider.GetRequiredService<PopupDictionaryService>().MainWindow = mainView;
     }
 }

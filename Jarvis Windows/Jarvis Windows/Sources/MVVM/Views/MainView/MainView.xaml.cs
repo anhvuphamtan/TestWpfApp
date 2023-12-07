@@ -25,4 +25,19 @@ public partial class MainView : Window
     {
         this.Close();
     }
+
+    private void GuidelineText_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        
+    }
+
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        System.Diagnostics.Process.Start(new ProcessStartInfo
+        {
+            FileName = "https://jarvis.cx/", 
+            UseShellExecute = true
+        });
+    }
 }

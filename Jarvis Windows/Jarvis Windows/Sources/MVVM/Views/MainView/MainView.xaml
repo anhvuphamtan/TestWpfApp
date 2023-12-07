@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bi="https://github.com/helluvamatt/BootstrapIcons.Wpf/"
         xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MainView"
         xmlns:menuOperation="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView"
         xmlns:jarvisAction="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.JarvisActionView"
@@ -11,7 +12,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
-        Title="Jarvis MainView" Height="360" Width="600">
+        Title="MainView" Height="496" Width="820">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,74 +20,231 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
-    <Border CornerRadius="15" Background="#EBEBEB" BorderBrush="White" BorderThickness="2">
+
+    <Border CornerRadius="20" Background="#EEF4FC" BorderBrush="White" BorderThickness="1"  Padding="20,20">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="4.8*"/>
-                <RowDefinition Height="0.2*"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="438"/>
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0 10" VerticalAlignment="Top">
-                <Image DockPanel.Dock="Left" Source="../../../../Assets/Images/jarvis_logo.png" Margin="10 0" Width="35" Height="35">
-                    <Image.Effect>
-                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
-                    </Image.Effect>
-                </Image>
+            <!-- Frame 10 -->
+            <Grid Grid.Row="0" Width="780" Height="18">
+                <DockPanel LastChildFill="False" VerticalAlignment="Center">
+                    <Button
+                        DockPanel.Dock="Right"
+                        x:Name="btnCloseIntroduction"
+                        Width="20"
+                        Height="20"
+                        Padding="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Margin="0 0 10 0"
+                        Click="btnCloseIntroduction_Click"
+                        Foreground="#303030">
 
-                <TextBlock 
-                    DockPanel.Dock="Left" 
-                    VerticalAlignment="Center"
-                    FontFamily="Iner"
-                    FontSize="20"
-                    FontWeight="Bold"
-                    Foreground="#275CB0">Jarvis Assistant</TextBlock>
-
-                <Button
-                    DockPanel.Dock="Right"
-                    x:Name="btnCloseIntroduction"
-                    Width="20"
-                    Height="20"
-                    Padding="0"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Margin="0 0 10 0"
-                    Click="btnCloseIntroduction_Click"
-                    Foreground="#303030">
-                    <Button.Effect>
-                        <DropShadowEffect Color="#303030" Direction="300" ShadowDepth="5" Opacity="0.5"/>
-                    </Button.Effect>
-                    <Button.Content>
-                        <Image Source="../../../../Assets/Images/cross.png"/>
-                    </Button.Content>
-                </Button>
-            </DockPanel>
-
-            <Grid Grid.Row="1">
-                <ContentControl Content="{Binding NavigationService.CurrentView}"/>
+                        <Button.Content>
+                            <Image Source="../../../../Assets/Images/cross.png"/>
+                        </Button.Content>
+                    </Button>
+                </DockPanel>
             </Grid>
 
-            <Popup Name="jarvisActionPopup" Placement="Absolute" 
-                   VerticalOffset="{Binding PopupDictionaryService.JarvisActionPosition.Y}" 
-                   HorizontalOffset="{Binding PopupDictionaryService.JarvisActionPosition.X}" 
-                   AllowsTransparency="True" 
-                   IsOpen="{Binding PopupDictionaryService.IsShowJarvisAction}"
-                   Width="22" Height="22">
-                <jarvisAction:JarvisActionView/>
-            </Popup>
+            <!-- Frame 20 -->
+            <Grid Grid.Row="1" Width="780" Height="438">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="37"/>
+                    <RowDefinition Height="297"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
 
-            <Popup Name="jarvisMenuPopup" Placement="Absolute"
-                   VerticalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.Y}"
-                   HorizontalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.X}"
-                   AllowsTransparency="True" 
-                   IsOpen="{Binding PopupDictionaryService.IsShowMenuOperations}"
-                   Width="400" Height="165">
-                <menuOperation:MenuOperatorsView/>
-            </Popup>
-            
+                <!-- Frame 8 -->
+                <Grid Grid.Row="0" Width="732" Height="37">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="86"/>
+                        <ColumnDefinition Width="9"/>
+                        <ColumnDefinition Width="43"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Frame 11 -->
+                    <Grid Grid.Column="0" Width="86" Height="37" >
+                        <Image 
+                            Source="../../../../Assets/Images/jarvis_logo.png" 
+                            Margin="0,6.5,0,6.5"
+                            Width="24" Height="24"
+                            HorizontalAlignment="Left"/>
+
+                        <TextBlock 
+                            Margin="32,4.5,0,4.5"
+                            Width="54"
+                            Height="28"
+                            Padding="3,3,3,3"
+                            
+                            FontSize="18"
+                            FontFamily="Ag"
+                            FontWeight="Bold"
+                            Foreground="#1450A3">Jarvis</TextBlock>
+
+                    </Grid>
+
+                    <!-- Frame 21 -->
+                    <Grid Grid.Column="2" Width="43" Height="20">
+                        <Border Background="White" Width="43" Height="20" CornerRadius="12" >
+                            <TextBlock 
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                
+                                FontSize="12"
+                                FontFamily="Inter"
+                                FontWeight="Medium"
+                                Foreground="#9CA3AF">Beta</TextBlock>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- Frame 22 -->
+                <Grid Grid.Row="1" Width="732" Height="297">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="366"/>
+                        <ColumnDefinition Width="366"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Frame 9 -->
+                    <Grid Grid.Column="0" Width="366" Height="297">
+
+                        <TextBlock      
+                            Padding="2,88.5,0,88.5"
+                            
+                            FontSize="24"
+                            FontFamily="Ag"
+                            FontWeight="Bold"
+                            Foreground="#082041">
+                            Jarvis is up <LineBreak/> and running
+                        </TextBlock>
+
+                        <TextBlock 
+                            Padding="2,168.5,0,168.5"
+    
+                            FontSize="14"
+                            FontFamily="Ag"
+                            FontWeight="Normal"
+                            Foreground="#6B7280">
+                            Start typing in app or on a website, and you’ll see<LineBreak/>Jarvis appear
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Frame 10 -->
+                    <Grid Grid.Column="1" Width="366" Height="297">
+                        <Border 
+                            Background="White" 
+                            Width="326" Height="265" 
+                            CornerRadius="10" 
+                            Margin="40,16,0,16" Padding="20,20,20,20">
+                            <TextBlock                   
+                                FontSize="14"
+                                FontFamily="Ag"
+                                FontWeight="Medium"
+                                Foreground="#082041">Try it out!
+                            </TextBlock>
+                        </Border>
+
+                        <Line X1="60" Y1="76" X2="346" Y2="76" Stroke="#AEC9EF" StrokeThickness="1"/>
+
+
+                        <TextBox
+                            Margin="60,92,20,0"
+                            Name="GuidelineText"
+                            Foreground="#9CA3AF"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            TextWrapping="Wrap"
+                            
+                            FontFamily="Ag"
+                            FontSize="13"
+                            
+                            
+                            Visibility="Visible"
+                            TextChanged="GuidelineText_TextChanged" Width="220" Height="50">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <VisualBrush>
+                                                        <VisualBrush.Visual>
+                                                            <TextBlock 
+                                                                FontFamily="Ag"
+                                                                FontSize="14"
+                                                                Foreground="#9CA3AF">
+                                                                
+                                                                    Write anything here and tap on the <LineBreak/>
+                                                                    Translate, Revise, or Shorten button. <LineBreak/>
+                                                                    Jarvis will show you the magic
+                                                            </TextBlock>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
+
+                </Grid>
+
+
+                <!-- Frame 23 -->
+                <Grid Grid.Row="3" Width="145" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="24,0,0,0">
+                    
+                    <Button 
+                        Background="#00428F"
+                        Foreground="White"       
+                        BorderBrush="#00428F"
+                        BorderThickness="1"
+                        FontSize="13"
+                        
+                        FontWeight="Bold"
+                        Content="More at Jarvis" Click="Button_Click">
+
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+
+                </Grid>
+                
+                <Popup Name="jarvisActionPopup" Placement="Absolute" 
+                       VerticalOffset="{Binding PopupDictionaryService.JarvisActionPosition.Y}" 
+                       HorizontalOffset="{Binding PopupDictionaryService.JarvisActionPosition.X}" 
+                       AllowsTransparency="True" 
+                       IsOpen="{Binding PopupDictionaryService.IsShowJarvisAction}"
+                       Width="30" Height="30" Margin="284,4,284,4">
+                    <jarvisAction:JarvisActionView/>
+                </Popup>
+ 
+                <Popup Name="jarvisMenuPopup" Placement="Absolute"
+                       VerticalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.Y}"
+                       HorizontalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.X}"
+                       AllowsTransparency="True" 
+                       IsOpen="{Binding PopupDictionaryService.IsShowMenuOperations}"
+                       Width="400" Height="165" Margin="99,0,99,57" Grid.RowSpan="3">
+                    <menuOperation:MenuOperatorsView/>
+                </Popup>
+                
+            </Grid>
         </Grid>
+
     </Border>
 </Window>
