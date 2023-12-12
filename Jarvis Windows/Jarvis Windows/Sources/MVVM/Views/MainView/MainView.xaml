@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MainView"
         xmlns:menuOperation="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView"
         xmlns:jarvisAction="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.JarvisActionView"
+        xmlns:trayMenuPopup="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.TrayMenuPopupView"
         mc:Ignorable="d"
         WindowStyle="None"
         Background="Transparent"
@@ -33,7 +34,7 @@
                 <DockPanel LastChildFill="False" VerticalAlignment="Center">
                     <Button
                         DockPanel.Dock="Right"
-                        x:Name="btnCloseIntroduction"
+                        x:Name="btnCloseMainWindows"
                         Width="20"
                         Height="20"
                         Padding="0"
@@ -42,7 +43,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Margin="0 0 10 0"
-                        Click="btnCloseIntroduction_Click"
+                        Click="btnCloseMainWindows_Click"
                         Foreground="#303030">
 
                         <Button.Content>
@@ -204,16 +205,16 @@
                 <!-- Frame 23 -->
                 <Grid Grid.Row="3" Width="145" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Margin="24,0,0,0">
-                    
+
                     <Button 
                         Background="#00428F"
                         Foreground="White"       
                         BorderBrush="#00428F"
                         BorderThickness="1"
                         FontSize="13"
-                        
+                        x:Name="btnMoreAtJarvis"
                         FontWeight="Bold"
-                        Content="More at Jarvis" Click="Button_Click">
+                        Content="More at Jarvis" Click="btnMoreAtJarvis_Click">
 
                         <Button.Resources>
                             <Style TargetType="Border">
@@ -224,7 +225,7 @@
 
 
                 </Grid>
-                
+
                 <Popup Name="jarvisActionPopup" Placement="Absolute" 
                        VerticalOffset="{Binding PopupDictionaryService.JarvisActionPosition.Y}" 
                        HorizontalOffset="{Binding PopupDictionaryService.JarvisActionPosition.X}" 
@@ -233,7 +234,7 @@
                        Width="22" Height="22" Margin="284,4,284,4">
                     <jarvisAction:JarvisActionView/>
                 </Popup>
- 
+
                 <Popup Name="jarvisMenuPopup" Placement="Absolute"
                        VerticalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.Y}"
                        HorizontalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.X}"
@@ -242,9 +243,13 @@
                        Width="400" Height="165" Margin="99,0,99,57" Grid.RowSpan="3">
                     <menuOperation:MenuOperatorsView/>
                 </Popup>
-                
+
+                <Popup Name="trayMenuPopup" Placement="Absolute"
+                       AllowsTransparency="True" 
+                       Width="140" Height="55">
+                    <trayMenuPopup:TrayMenuPopupView/>
+                </Popup>
             </Grid>
         </Grid>
-
     </Border>
 </Window>

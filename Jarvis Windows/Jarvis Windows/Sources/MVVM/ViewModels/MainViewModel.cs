@@ -21,12 +21,13 @@ public class MainViewModel : ViewModelBase
     private PopupDictionaryService _popupDictionaryService;
     private UIElementDetector _uIElementDetector;
     public List<Language> Languages { get; set; }
-
     public RelayCommand ShowMenuOperationsCommand { get; set; }
     public RelayCommand HideMenuOperationsCommand { get; set; }
     public RelayCommand ReviseCommand { get; set; }
     public RelayCommand ShortenCommand { get; set; }
     public RelayCommand TranslateCommand { get; set; }
+    public RelayCommand OpenSettingsCommand { get; set; }
+    public RelayCommand QuitAppCommand { get; set; }
 
     public INavigationService NavigationService
     {
@@ -68,6 +69,8 @@ public class MainViewModel : ViewModelBase
         ReviseCommand = new RelayCommand(ExecuteReviseCommand, o => true);
         ShortenCommand = new RelayCommand(ExecuteShortenCommand, o => true);
         TranslateCommand = new RelayCommand(ExecuteTranslateCommand, o => true);
+        OpenSettingsCommand = new RelayCommand(ExecuteOpenSettingsCommand, o => true);
+        QuitAppCommand = new RelayCommand(ExecuteQuitAppCommand, o => true);
 
         string jsonContent = File.ReadAllText("../../../Appsettings/Configs/languages_supported.json");
         Languages = JsonConvert.DeserializeObject<List<Language>>(jsonContent);
@@ -76,11 +79,20 @@ public class MainViewModel : ViewModelBase
         UIElementDetector.SubscribeToElementFocusChanged();
     }
 
+    private void ExecuteQuitAppCommand(object obj)
+    {
+        Application.Current.Shutdown();
+    }
+
+    private void ExecuteOpenSettingsCommand(object obj)
+    {
+        throw new NotImplementedException();
+    }
+
     private async void ExecuteTranslateCommand(object obj)
     {
         try
         {
-            //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
@@ -92,7 +104,6 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.ReviseHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);

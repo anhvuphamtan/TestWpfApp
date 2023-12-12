@@ -1,29 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Jarvis_Windows.Sources.MVVM.Views.MainView;
 public partial class MainView : Window
 {
+    private TaskbarIcon _taskbarIcon;
     public MainView()
     {
         InitializeComponent();
-    }
-
-    private void btnCloseIntroduction_Click(object sender, RoutedEventArgs e)
-    {
-        this.Close();
+        InitTrayIcon();
     }
 
     private void GuidelineText_TextChanged(object sender, TextChangedEventArgs e)
@@ -31,12 +21,58 @@ public partial class MainView : Window
         
     }
 
+    private void InitTrayIcon()
+    {
+        _taskbarIcon = new TaskbarIcon();
+        _taskbarIcon.Icon = new System.Drawing.Icon("Assets/Icons/jarvis_icon.ico");
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+        _taskbarIcon.TrayLeftMouseDown += (sender, e) =>
+        {
+            this.Show();
+        };
+
+        _taskbarIcon.TrayRightMouseDown += TaskbarIcon_TrayRightMouseDown;
+
+        trayMenuPopup.LostFocus += (sender, e) =>
+        {
+            trayMenuPopup.IsOpen = false;
+        };
+
+        trayMenuPopup.LostMouseCapture += (sender, e) =>
+        {
+            trayMenuPopup.IsOpen = false;
+        };
+    }
+
+    private void TrayMenuPopup_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (trayMenuPopup.IsMouseOver)
+        {
+            trayMenuPopup.IsOpen = false;
+            trayMenuPopup.PreviewMouseDown -= TrayMenuPopup_PreviewMouseDown;
+        }
+    }
+
+    private void TaskbarIcon_TrayRightMouseDown(object sender, RoutedEventArgs e)
+    {
+        //Point mousePos = NativeUser32API.GetCursorPosition();
+        //FIXME:
+        trayMenuPopup.HorizontalOffset = 1100;
+        trayMenuPopup.VerticalOffset = 700;
+        trayMenuPopup.IsOpen = true;
+        trayMenuPopup.PreviewMouseDown += TrayMenuPopup_PreviewMouseDown;
+    }
+
+    private void btnCloseMainWindows_Click(object sender, RoutedEventArgs e)
+    {
+        this.Hide();
+    }
+
+    private void btnMoreAtJarvis_Click(object sender, RoutedEventArgs e)
     {
         System.Diagnostics.Process.Start(new ProcessStartInfo
         {
-            FileName = "https://jarvis.cx/", 
+            FileName = "https://jarvis.cx/",
             UseShellExecute = true
         });
     }
