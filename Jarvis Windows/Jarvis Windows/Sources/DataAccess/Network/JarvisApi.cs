@@ -50,7 +50,7 @@ public sealed class JarvisApi
 
     public static async Task<string?> TranslateHandler(String content, String lang)
     {
-        var requestBody = $"{{\"content\":\"{content}\",\"lang\":\"{lang}\"}}";
+        var requestBody = $"{{\"to\":\"{lang}\",\"content\":\"{content}\"}}";
         return await ApiHandler(requestBody, _translateEndPoint);
     }
 
