@@ -1,14 +1,9 @@
-﻿using Jarvis_Windows.Sources.MVVM.ViewModels;
-using System;
+﻿using System;
 using System.Windows.Automation;
 using System.Windows;
 using Jarvis_Windows.Sources.Utils.Services;
 using Jarvis_Windows.Sources.Utils.WindowsAPI;
-using System.Windows.Media;
-using System.Linq;
-using System.Xml.Linq;
 using System.Diagnostics;
-using System.Windows.Automation.Peers;
 
 namespace Jarvis_Windows.Sources.Utils.Accessibility;
 
@@ -47,16 +42,27 @@ public class UIElementDetector
         Automation.AddAutomationFocusChangedEventHandler(_focusChangedEventHandler);
     }
 
+    public void UnSubscribeToElementFocusChanged()
+    {
+        _focusChangedEventHandler = new AutomationFocusChangedEventHandler(OnElementFocusChanged);
+        Automation.RemoveAutomationFocusChangedEventHandler(_focusChangedEventHandler);
+    }
+
     private void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
     {
         AutomationElement? newFocusElement = sender as AutomationElement;
+        Debug.WriteLine(newFocusElement.Current.ControlType.ProgrammaticName);
 
-        ///FIXME: Crashing Not Available Element
-        if (newFocusElement != null
-            && (newFocusElement.Current.LocalizedControlType.Equals("edit") 
-            || newFocusElement.Current.LocalizedControlType.Equals("document")))
+        if (newFocusElement != null)
         {
-            _focusingElement = newFocusElement;
+            if (newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Custom"
+                || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Edit"
+                || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Document")
+            {
+                _focusingElement = newFocusElement;
+            }
+
+
             SubscribeToRectBoundingChanged();
 
             _popupDictionaryService.ShowJarvisAction(true);
@@ -104,29 +110,44 @@ public class UIElementDetector
 
     private void SubscribeToRectBoundingChanged()
     {
-        IntPtr activeApplicationHandle = NativeUser32API.GetForegroundWindow();
-        if (activeApplicationHandle != IntPtr.Zero)
+        if(_focusingElement != null)
         {
-            AutomationElement? automationElement = AutomationElement.FromHandle(activeApplicationHandle);
-            if (automationElement != null)
+            IntPtr activeApplicationHandle = NativeUser32API.GetForegroundWindow();
+            if (activeApplicationHandle != IntPtr.Zero)
             {
-                AutomationPropertyChangedEventHandler propertyChanged = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-                Automation.AddAutomationPropertyChangedEventHandler(automationElement, TreeScope.Element, propertyChanged, AutomationElement.BoundingRectangleProperty);
+                AutomationElement? automationElement = AutomationElement.FromHandle(activeApplicationHandle);
+                if (automationElement != null)
+                {
+                    AutomationPropertyChangedEventHandler propertyChanged = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
+                    Automation.AddAutomationPropertyChangedEventHandler(automationElement, TreeScope.Element, propertyChanged, AutomationElement.BoundingRectangleProperty);
+                }
             }
-        }
 
-        AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-        Automation.AddAutomationPropertyChangedEventHandler(_focusingElement, TreeScope.Element, propertyChangedHandler, AutomationElement.BoundingRectangleProperty);
+            AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
+            Automation.AddAutomationPropertyChangedEventHandler(_focusingElement, TreeScope.Element, propertyChangedHandler, AutomationElement.BoundingRectangleProperty);
+        }
     }
 
     private void OnElementPropertyChanged(object sender, AutomationPropertyChangedEventArgs e)
     {
-        _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
-        _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
+        if(_focusingElement != null)
+        {
+            _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
+            _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
 
-        AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-        Automation.RemoveAutomationPropertyChangedEventHandler(_focusingElement, propertyChangedHandler);
+            AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
+            Automation.RemoveAutomationPropertyChangedEventHandler(_focusingElement, propertyChangedHandler);
+        }
     }   
+
+    private AutomationElement FindChildEditElement(AutomationElement parrentElement)
+    {
+        System.Windows.Automation.Condition editCondition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Edit);
+
+        AutomationElement editElement = parrentElement.FindFirst(TreeScope.Descendants, editCondition);
+
+        return editElement;
+    }
 
     public void SetValueForFocusingEditElement(String? value)
     {
