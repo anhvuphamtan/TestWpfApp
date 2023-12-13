@@ -22,7 +22,16 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border CornerRadius="20" Background="#EEF4FC" BorderBrush="White" BorderThickness="1"  Padding="20,20">
+    <Border CornerRadius="20" BorderBrush="White" BorderThickness="1"  Padding="20,20">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <LinearGradientBrush.GradientStops>
+                    <GradientStop Offset="0.05" Color="#FFFFFF" />
+                    <GradientStop Offset="1" Color="#D3E3FF" />
+                </LinearGradientBrush.GradientStops>
+            </LinearGradientBrush>
+        </Border.Background>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="20"/>

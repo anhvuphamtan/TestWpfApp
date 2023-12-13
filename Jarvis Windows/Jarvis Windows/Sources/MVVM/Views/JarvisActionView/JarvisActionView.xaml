@@ -5,13 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.JarvisActionView"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-            xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
-            xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
-            xmlns:animations="clr-namespace:System.Windows.Media.Animation;assembly=PresentationCore"
+             xmlns:media="clr-namespace:System.Windows.Media;assembly=PresentationCore"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+             xmlns:animations="clr-namespace:System.Windows.Media.Animation;assembly=PresentationCore"
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="20">
     <UserControl.Resources>
-        
+        <!-- Spinning animation storyboard -->
+        <Storyboard x:Key="SpinAnimation">
+            <DoubleAnimation
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(RotateTransform.Angle)"
+                From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
+        </Storyboard>
+
         <Style x:Key="ImageButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Width" Value="20"/>
@@ -20,8 +26,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="Transparent"
-                            BorderBrush="Transparent"
-                            BorderThickness="0">
+                                BorderBrush="Transparent"
+                                BorderThickness="0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -35,36 +41,42 @@
             </Setter>
         </Style>
     </UserControl.Resources>
+
     <Border Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
         <Button Style="{StaticResource ImageButtonStyle}"
                 Command="{Binding ShowMenuOperationsCommand}"
                 IsEnabled="{Binding IsAnimationEnabled}">
-            <!--<Image Source="../../../../Assets/Images/jarvis_logo.png"/>-->
-            <Image x:Name="img" Source="../../../../Assets/Images/jarvis_logo.png">
-                <Image.RenderTransform>
-                    <RotateTransform x:Name="rotateTransform" Angle="0"/>
-                </Image.RenderTransform>
-                <Image.RenderTransformOrigin>
-                    <Point X="0.5" Y="0.5"/>
-                </Image.RenderTransformOrigin>
-                <!--<Image.Triggers>
-                    <EventTrigger RoutedEvent="MouseEnter">
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation
-                                    Storyboard.TargetName="rotateTransform"
-                                    Storyboard.TargetProperty="Angle"
-                                    To="360"
-                                    Duration="0:0:1"
-                                    RepeatBehavior="Forever"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                    --><!--<EventTrigger RoutedEvent="MouseLeave">
-                        <StopStoryboard BeginStoryboardName="rotateStoryboard"/>
-                    </EventTrigger>--><!--
-                </Image.Triggers>-->
-            </Image>
+            <Border>
+
+                <Image x:Name="img" Source="../../../../Assets/Images/jarvis_logo.png">
+
+                    <Image.RenderTransformOrigin>
+                        <Point X="0.5" Y="0.5"/>
+                    </Image.RenderTransformOrigin>
+
+                    <Image.Style>
+                        <Style TargetType="Image">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSpinningJarvisIcon}" Value="True">
+                                    <Setter Property="RenderTransform">
+                                        <Setter.Value>
+                                            <RotateTransform Angle="360"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard Storyboard="{StaticResource SpinAnimation}" />
+                                    </DataTrigger.EnterActions>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSpinning}" Value="False">
+
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+
+
+            </Border>
         </Button>
     </Border>
 </UserControl>

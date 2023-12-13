@@ -12,6 +12,7 @@ using Jarvis_Windows.Sources.MVVM.Models;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.IO;
+using System.Windows.Media.Animation;
 
 namespace Jarvis_Windows.Sources.MVVM.ViewModels;
 
@@ -20,6 +21,7 @@ public class MainViewModel : ViewModelBase
     private INavigationService? _navigationService;
     private PopupDictionaryService _popupDictionaryService;
     private UIElementDetector _uIElementDetector;
+    private bool _isSpinningJarvisIcon; // Spinning Jarvis icon
     public List<Language> Languages { get; set; }
     public RelayCommand ShowMenuOperationsCommand { get; set; }
     public RelayCommand HideMenuOperationsCommand { get; set; }
@@ -59,6 +61,17 @@ public class MainViewModel : ViewModelBase
         }
     }
 
+    // Spinning Jarvis icon
+    public bool IsSpinningJarvisIcon
+    {
+        get { return _isSpinningJarvisIcon; }
+        set
+        {
+            _isSpinningJarvisIcon = value;
+            OnPropertyChanged();
+        }
+    }
+
     public MainViewModel(INavigationService navigationService, PopupDictionaryService popupDictionaryService, UIElementDetector uIElementDetector)
     {
         NavigationService = navigationService;
@@ -93,33 +106,48 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
+            IsSpinningJarvisIcon = true; // Start spinning animation
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
         }
         catch { }
+        finally
+        {
+            IsSpinningJarvisIcon = false; // Stop spinning animation
+        }
     }
 
     private async void ExecuteReviseCommand(object obj)
     {
         try
         {
+            IsSpinningJarvisIcon = true; // Start spinning animation
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.ReviseHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
         }
         catch { }
+        finally
+        {
+            IsSpinningJarvisIcon = false; // Stop spinning animation
+        }
     }
 
     private async void ExecuteShortenCommand(object obj)
     {
         try
         {
+            IsSpinningJarvisIcon = true; // Start spinning animation
             //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.ShortenHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
         }
         catch { }
+        finally
+        {
+            IsSpinningJarvisIcon = false; // Stop spinning animation
+        }
     }
 }
