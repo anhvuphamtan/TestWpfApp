@@ -108,7 +108,7 @@ public class MainViewModel : ViewModelBase
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+            var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
         }
         catch { }
@@ -124,7 +124,7 @@ public class MainViewModel : ViewModelBase
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.ReviseHandler(textFromElement);
+            var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
         }
         catch { }
@@ -141,7 +141,7 @@ public class MainViewModel : ViewModelBase
             IsSpinningJarvisIcon = true; // Start spinning animation
             //_popupDictionaryService.ShowMenuOperations(false);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.ShortenHandler(textFromElement);
+            var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
         }
         catch { }

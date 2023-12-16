@@ -69,8 +69,12 @@
 
   <ItemGroup>
     <Content Include="AppSettings\Configs\languages_supported.json" />
-    <Content Include="AppSettings\Envs\settings.dev.json" />
-    <Content Include="AppSettings\Envs\settings.product.json" />
+    <Content Include="AppSettings\Envs\settings.dev.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="AppSettings\Envs\settings.product.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\Icons\jarvis_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
