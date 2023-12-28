@@ -50,38 +50,41 @@ public class UIElementDetector
 
     private void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
     {
-        AutomationElement? newFocusElement = sender as AutomationElement;
-        Debug.WriteLine(newFocusElement.Current.ControlType.ProgrammaticName);
-
-        if (newFocusElement != null)
+        try
         {
-            if (newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Custom"
-                || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Edit"
-                || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Document")
+            AutomationElement? newFocusElement = sender as AutomationElement;
+            Debug.WriteLine(newFocusElement.Current.ControlType.ProgrammaticName);
+
+            if (newFocusElement != null &&
+                (newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Custom"
+                    || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Edit"
+                    || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Document"))
             {
                 _focusingElement = newFocusElement;
+
+                SubscribeToRectBoundingChanged();
+
+                _popupDictionaryService.ShowJarvisAction(true);
+                _popupDictionaryService.ShowMenuOperations(false);
+                _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
+                _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
             }
-
-
-            SubscribeToRectBoundingChanged();
-
-            _popupDictionaryService.ShowJarvisAction(true);
-            _popupDictionaryService.ShowMenuOperations(false);
-            _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
-            _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
-        }
-        else
-        {
-            IntPtr currentAppHandle = NativeUser32API.GetForegroundWindow();
-            AutomationElement foregroundApp = AutomationElement.FromHandle(currentAppHandle);
-            if (foregroundApp != null)
+            else
             {
-                if (foregroundApp.Current.Name.Equals("Jarvis MainView"))
-                    return;
-            }
+                IntPtr currentAppHandle = NativeUser32API.GetForegroundWindow();
+                AutomationElement foregroundApp = AutomationElement.FromHandle(currentAppHandle);
+                if (foregroundApp != null)
+                {
+                    if (foregroundApp.Current.Name.Equals("Jarvis MainView"))
+                        return;
+                }
 
-            _popupDictionaryService.ShowJarvisAction(false);
-            _popupDictionaryService.ShowMenuOperations(false);
+                _popupDictionaryService.ShowJarvisAction(false);
+                _popupDictionaryService.ShowMenuOperations(false);
+            }
+        }
+         catch (ElementNotAvailableException) 
+        {       
         }
     }
 
@@ -160,7 +163,7 @@ public class UIElementDetector
                     valuePattern.SetValue(value);
             }
         }
-        catch (Exception)
+        catch (ElementNotAvailableException)
         {
             throw;
         }
@@ -182,7 +185,7 @@ public class UIElementDetector
                 }
             }
         }
-        catch (Exception)
+        catch (ElementNotAvailableException)
         {
             return String.Empty;
         }
