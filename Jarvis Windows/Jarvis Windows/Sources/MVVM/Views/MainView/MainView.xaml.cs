@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Jarvis_Windows.Sources.MVVM.Views.MainView;
 public partial class MainView : Window
@@ -20,6 +22,8 @@ public partial class MainView : Window
     {
         
     }
+
+
 
     private void InitTrayIcon()
     {
@@ -46,6 +50,7 @@ public partial class MainView : Window
 
     private void TrayMenuPopup_PreviewMouseDown(object sender, MouseButtonEventArgs e)
     {
+        return;
         if (trayMenuPopup.IsMouseOver)
         {
             trayMenuPopup.IsOpen = false;

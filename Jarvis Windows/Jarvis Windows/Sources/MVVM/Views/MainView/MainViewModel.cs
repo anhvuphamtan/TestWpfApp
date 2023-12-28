@@ -85,7 +85,16 @@ public class MainViewModel : ViewModelBase
         OpenSettingsCommand = new RelayCommand(ExecuteOpenSettingsCommand, o => true);
         QuitAppCommand = new RelayCommand(ExecuteQuitAppCommand, o => true);
 
-        string jsonContent = File.ReadAllText("../../../Appsettings/Configs/languages_supported.json");
+        string relativePath = Path.Combine("Appsettings", "Configs", "languages_supported.json");
+        string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
+        string jsonContent = "";
+        
+        if (File.Exists(fullPath))
+        {
+            jsonContent = File.ReadAllText(fullPath);
+        }
+        // Console.WriteLine("Full Path: " + jsonContent);
+
         Languages = JsonConvert.DeserializeObject<List<Language>>(jsonContent);
 
         //Register Acceccibility service
@@ -107,6 +116,8 @@ public class MainViewModel : ViewModelBase
         try
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
+            // Trigger here
+            HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
@@ -123,6 +134,7 @@ public class MainViewModel : ViewModelBase
         try
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
+            HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
@@ -140,6 +152,7 @@ public class MainViewModel : ViewModelBase
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
             //_popupDictionaryService.ShowMenuOperations(false);
+            HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
