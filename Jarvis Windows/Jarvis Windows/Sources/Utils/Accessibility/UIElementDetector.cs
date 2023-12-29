@@ -4,6 +4,9 @@ using System.Windows;
 using Jarvis_Windows.Sources.Utils.Services;
 using Jarvis_Windows.Sources.Utils.WindowsAPI;
 using System.Diagnostics;
+using System.Xaml;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Jarvis_Windows.Sources.Utils.Accessibility;
 
@@ -48,21 +51,45 @@ public class UIElementDetector
         Automation.RemoveAutomationFocusChangedEventHandler(_focusChangedEventHandler);
     }
 
+    private bool IsEditableElement(AutomationElement? automationElement)
+    {
+        if (automationElement != null)
+        {
+            Object patternObj;
+            if (automationElement.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
+            {
+                ValuePattern? valuePattern = patternObj as ValuePattern;
+                if (valuePattern != null)
+                    return true;
+            }
+
+            if (automationElement.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
+            {
+                TextPattern? textPattern = patternObj as TextPattern;
+                if (textPattern != null)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     private void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
     {
-        try
-        {
-            AutomationElement? newFocusElement = sender as AutomationElement;
-            Debug.WriteLine(newFocusElement.Current.ControlType.ProgrammaticName);
+        AutomationElement? newFocusElement = sender as AutomationElement;
+        Debug.WriteLine($"↘️ ↘️ ↘️ Focused to : {newFocusElement?.Current.ControlType.ProgrammaticName}");
 
-            if (newFocusElement != null &&
-                (newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Custom"
-                    || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Edit"
-                    || newFocusElement.Current.ControlType.ProgrammaticName == "ControlType.Document"))
+        AutomationElement rootElement = AutomationElement.RootElement;
+        if (rootElement != null)
+        {
+            Debug.WriteLine($"🔗🔗🔗 Root Element: {newFocusElement?.Current.ControlType.ProgrammaticName}");
+        }
+
+        if (newFocusElement != null)
+        {
+            if (IsEditableElement(newFocusElement))
             {
                 _focusingElement = newFocusElement;
-
-                SubscribeToRectBoundingChanged();
+                SubscribeToElementPropertyChanged(_focusingElement, AutomationElement.BoundingRectangleProperty);
 
                 _popupDictionaryService.ShowJarvisAction(true);
                 _popupDictionaryService.ShowMenuOperations(false);
@@ -71,20 +98,37 @@ public class UIElementDetector
             }
             else
             {
-                IntPtr currentAppHandle = NativeUser32API.GetForegroundWindow();
-                AutomationElement foregroundApp = AutomationElement.FromHandle(currentAppHandle);
-                if (foregroundApp != null)
+                try
                 {
-                    if (foregroundApp.Current.Name.Equals("Jarvis MainView"))
-                        return;
+                    IntPtr currentAppHandle = NativeUser32API.GetForegroundWindow();
+                    AutomationElement foregroundApp = AutomationElement.FromHandle(currentAppHandle);
+                    if (foregroundApp != null)
+                    {
+                        if (foregroundApp.Current.Name.Equals("Jarvis MainView"))
+                            return;
+                    }
+                    _focusingElement = null;
+                    _popupDictionaryService.ShowJarvisAction(false);
+                    _popupDictionaryService.ShowMenuOperations(false);
+                }
+                catch (ArgumentException)
+                {
+                    Debug.WriteLine($"❌❌❌ Argument Exception");
+                }
+                catch (NullReferenceException)
+                {
+                    Debug.WriteLine($"Null reference exception");
+                }
+                catch (ElementNotAvailableException)
+                {
+                    Debug.WriteLine($"❌❌❌ Element is not available");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌❌❌ Exception: {ex.Message}");
                 }
 
-                _popupDictionaryService.ShowJarvisAction(false);
-                _popupDictionaryService.ShowMenuOperations(false);
             }
-        }
-         catch (ElementNotAvailableException) 
-        {       
         }
     }
 
@@ -99,49 +143,80 @@ public class UIElementDetector
                 placementPoint.X = elementRectBounding.Left + elementRectBounding.Width;
                 placementPoint.Y = elementRectBounding.Top + elementRectBounding.Height * 0.5;
             }
+            catch (NullReferenceException)
+            {
+                Debug.WriteLine($"Null reference exception");
+            }
             catch (ElementNotAvailableException ex)
             {
                 Console.WriteLine($"Element is not available: {ex.Message}");
+                _popupDictionaryService.ShowJarvisAction(false);
+                _popupDictionaryService.ShowMenuOperations(false);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                _popupDictionaryService.ShowJarvisAction(false);
+                _popupDictionaryService.ShowMenuOperations(false);
             }
         }
         return placementPoint;
     }
 
-    private void SubscribeToRectBoundingChanged()
+    private void SubscribeToElementPropertyChanged(AutomationElement? trackingElement, AutomationProperty? trackingProperty)
     {
-        if(_focusingElement != null)
+        try
         {
-            IntPtr activeApplicationHandle = NativeUser32API.GetForegroundWindow();
-            if (activeApplicationHandle != IntPtr.Zero)
+            if (trackingElement != null)
             {
-                AutomationElement? automationElement = AutomationElement.FromHandle(activeApplicationHandle);
-                if (automationElement != null)
-                {
-                    AutomationPropertyChangedEventHandler propertyChanged = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-                    Automation.AddAutomationPropertyChangedEventHandler(automationElement, TreeScope.Element, propertyChanged, AutomationElement.BoundingRectangleProperty);
-                }
-            }
+                TreeScope treeScope = TreeScope.Element;
+                if (trackingProperty == AutomationElement.BoundingRectangleProperty)
+                    treeScope = TreeScope.Parent;
+                else if (trackingProperty == AutomationElement.IsOffscreenProperty)
+                    treeScope = TreeScope.Ancestors;
+                else if (trackingProperty == AutomationElement.IsKeyboardFocusableProperty)
+                    treeScope = TreeScope.Element;
 
-            AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-            Automation.AddAutomationPropertyChangedEventHandler(_focusingElement, TreeScope.Element, propertyChangedHandler, AutomationElement.BoundingRectangleProperty);
+                AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
+                Automation.AddAutomationPropertyChangedEventHandler(trackingElement, treeScope, propertyChangedHandler, trackingProperty);
+            }
+        }
+        catch (NullReferenceException)
+        {
+            Debug.WriteLine($"Null reference exception");
+            _popupDictionaryService.ShowJarvisAction(false);
+            _popupDictionaryService.ShowMenuOperations(false);
+        }
+        catch (ElementNotAvailableException)
+        {
+            Debug.WriteLine($"Element is not available");
+            _popupDictionaryService.ShowJarvisAction(false);
+            _popupDictionaryService.ShowMenuOperations(false);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"An error occurred: {ex.Message}");
+            _popupDictionaryService.ShowJarvisAction(false);
+            _popupDictionaryService.ShowMenuOperations(false);
         }
     }
 
     private void OnElementPropertyChanged(object sender, AutomationPropertyChangedEventArgs e)
     {
-        if(_focusingElement != null)
+        var automationElement = sender as AutomationElement;
+        if (e.Property == AutomationElement.BoundingRectangleProperty)
         {
+            Debug.WriteLine($"🟧🟧🟧 {automationElement?.Current.Name} Bounding Rectangle Changed");
             _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
             _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
-
-            AutomationPropertyChangedEventHandler propertyChangedHandler = new AutomationPropertyChangedEventHandler(OnElementPropertyChanged);
-            Automation.RemoveAutomationPropertyChangedEventHandler(_focusingElement, propertyChangedHandler);
         }
-    }   
+        else if (e.Property == AutomationElement.IsOffscreenProperty)
+        {
+            Debug.WriteLine($"👁️👁️👁️ {automationElement?.Current.ControlType.ProgrammaticName} Offscreen Property Changed");
+            _popupDictionaryService.ShowJarvisAction(false);
+            _popupDictionaryService.ShowMenuOperations(false);
+        }
+    }
 
     private AutomationElement FindChildEditElement(AutomationElement parrentElement)
     {
@@ -154,41 +229,92 @@ public class UIElementDetector
 
     public void SetValueForFocusingEditElement(String? value)
     {
-        try
+        int timeoutMilliseconds = 200;
+        if (_focusingElement != null)
         {
-            if (_focusingElement != null)
+
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task setValueTask = Task.Run(() =>
             {
-                ValuePattern? valuePattern = _focusingElement.GetCurrentPattern(ValuePattern.Pattern) as ValuePattern;
-                if (valuePattern != null)
-                    valuePattern.SetValue(value);
+                Debug.WriteLine($"❌❌❌ Set Value of {_focusingElement.Current.ClassName} {_focusingElement.Current.ControlType.ProgrammaticName}");
+                try
+                {
+                    ValuePattern? valuePattern = _focusingElement.GetCurrentPattern(ValuePattern.Pattern) as ValuePattern;
+                    if (valuePattern != null)
+                        valuePattern.SetValue(value);
+                }
+                catch (NullReferenceException)
+                {
+                    Debug.WriteLine($"Null reference exception");
+                }
+                catch (ElementNotAvailableException)
+                {
+                    Debug.WriteLine($"❌❌❌ Element is not available");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌❌❌ Exception: {ex.Message}");
+                }
+            });
+
+            if (!setValueTask.Wait(timeoutMilliseconds, cancellationToken))
+            {
+                cancellationTokenSource.Cancel();
+                throw new TimeoutException("The SetValueForFocusingEditElement operation has timed out.");
             }
-        }
-        catch (ElementNotAvailableException)
-        {
-            throw;
         }
     }
 
     public string GetTextFromFocusingEditElement()
     {
-        try
+        int timeoutMilliseconds = 200;
+        string result = string.Empty;
+
+        if (_focusingElement != null)
         {
-            if (_focusingElement != null)
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task<string> getValueTask = Task.Run(() =>
             {
-                ValuePattern? valuePattern = null;
-                object valuePatternObj;
-                if (_focusingElement.TryGetCurrentPattern(ValuePattern.Pattern, out valuePatternObj))
+                Debug.WriteLine($"❌❌❌ Get Value of {_focusingElement.Current.ClassName} {_focusingElement.Current.ControlType.ProgrammaticName}");
+                try
                 {
-                    valuePattern = valuePatternObj as ValuePattern;
-                    if (valuePattern != null)
-                        return valuePattern.Current.Value;
+                    ValuePattern? valuePattern = null;
+                    object valuePatternObj;
+                    if (_focusingElement.TryGetCurrentPattern(ValuePattern.Pattern, out valuePatternObj))
+                    {
+                        valuePattern = valuePatternObj as ValuePattern;
+                        if (valuePattern != null)
+                            return valuePattern.Current.Value;
+                    }
                 }
+                catch (NullReferenceException)
+                {
+                    Debug.WriteLine($"Null reference exception");
+                }
+                catch (ElementNotAvailableException)
+                {
+                    Debug.WriteLine($"❌❌❌ Element is not available");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"❌❌❌ Exception: {ex.Message}");
+                }
+                return string.Empty;
+            });
+
+            if (!getValueTask.Wait(timeoutMilliseconds, cancellationToken))
+            {
+                cancellationTokenSource.Cancel();
+                throw new TimeoutException("The GetTextFromFocusingEditElement operation has timed out.");
             }
+
+            result = getValueTask.Result;
         }
-        catch (ElementNotAvailableException)
-        {
-            return String.Empty;
-        }
-        return String.Empty;
+
+        return result;
     }
 }

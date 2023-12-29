@@ -120,6 +120,11 @@ public class MainViewModel : ViewModelBase
             HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+            if(textFromAPI == string.Empty)
+            {
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
+                return;
+            }
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
         }
         catch { }
@@ -137,6 +142,11 @@ public class MainViewModel : ViewModelBase
             HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
+            if (textFromAPI == string.Empty)
+            {
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.reviseError}");
+                return;
+            }
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
         }
         catch { }
@@ -155,6 +165,11 @@ public class MainViewModel : ViewModelBase
             HideMenuOperationsCommand.Execute(null);
             var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
             var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
+            if (textFromAPI == string.Empty)
+            {
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.shortennError}");
+                return;
+            }
             UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
         }
         catch { }
