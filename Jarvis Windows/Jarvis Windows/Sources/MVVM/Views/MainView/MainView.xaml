@@ -252,12 +252,12 @@
                        Width="400" Height="165" Margin="99,0,99,57" Grid.RowSpan="3">
                     <menuOperation:MenuOperatorsView/>
                 </Popup>
-
-                <Popup Name="trayMenuPopup" Placement="Absolute"
+                
+                <!--<Popup Name="trayMenuPopup" Placement="Absolute"
                        AllowsTransparency="True" 
                        Width="140" Height="55">
                     <trayMenuPopup:TrayMenuPopupView/>
-                </Popup>
+                </Popup>-->
             </Grid>
         </Grid>
     </Border>
