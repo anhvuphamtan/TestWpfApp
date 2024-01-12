@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.IO;
 using System.Windows.Media.Animation;
+using Jarvis_Windows.Sources.MVVM.Views.MainView;
 
 namespace Jarvis_Windows.Sources.MVVM.ViewModels;
 
@@ -22,6 +23,7 @@ public class MainViewModel : ViewModelBase
     private PopupDictionaryService _popupDictionaryService;
     private UIElementDetector _uIElementDetector;
     private bool _isSpinningJarvisIcon; // Spinning Jarvis icon
+    private string _mainWindowInputText;
     public List<Language> Languages { get; set; }
     public RelayCommand ShowMenuOperationsCommand { get; set; }
     public RelayCommand HideMenuOperationsCommand { get; set; }
@@ -57,6 +59,16 @@ public class MainViewModel : ViewModelBase
         set
         {
             _uIElementDetector = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public string MainWindowInputText
+    {
+        get { return _mainWindowInputText; }
+        set
+        {
+            _mainWindowInputText = value;
             OnPropertyChanged();
         }
     }
@@ -118,14 +130,21 @@ public class MainViewModel : ViewModelBase
             IsSpinningJarvisIcon = true; // Start spinning animation
             // Trigger here
             HideMenuOperationsCommand.Execute(null);
-            var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
+            
+            var textFromElement = "";
+            try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
+            catch { textFromElement = this.MainWindowInputText; }
+
             var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+            
             if(textFromAPI == string.Empty)
             {
                 Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
                 return;
             }
-            UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError);
+
+            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
+            catch { MainWindowInputText = textFromAPI; }
         }
         catch { }
         finally
@@ -140,14 +159,23 @@ public class MainViewModel : ViewModelBase
         {
             IsSpinningJarvisIcon = true; // Start spinning animation
             HideMenuOperationsCommand.Execute(null);
-            var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
+
+            var textFromElement = "";
+            try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
+            catch { textFromElement = this.MainWindowInputText; }
+
+            var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+
             if (textFromAPI == string.Empty)
             {
-                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.reviseError}");
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
                 return;
             }
-            UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError);
+
+            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
+            catch { MainWindowInputText = textFromAPI; }
+
+
         }
         catch { }
         finally
@@ -163,14 +191,21 @@ public class MainViewModel : ViewModelBase
             IsSpinningJarvisIcon = true; // Start spinning animation
             //_popupDictionaryService.ShowMenuOperations(false);
             HideMenuOperationsCommand.Execute(null);
-            var textFromElement = UIElementDetector.GetTextFromFocusingEditElement();
-            var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
+
+            var textFromElement = "";
+            try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
+            catch { textFromElement = this.MainWindowInputText; }
+
+            var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+
             if (textFromAPI == string.Empty)
             {
-                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.shortennError}");
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
                 return;
             }
-            UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError);
+
+            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
+            catch { MainWindowInputText = textFromAPI; }
         }
         catch { }
         finally

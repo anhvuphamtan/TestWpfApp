@@ -48,6 +48,7 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
                 {
                     PopupDictionaryService.TargetLangguage = ((Language)comboBox.SelectedItem).Value;
                     _languageSelectedIndex = comboBox.SelectedIndex;
+                    
                 }
             }
         }

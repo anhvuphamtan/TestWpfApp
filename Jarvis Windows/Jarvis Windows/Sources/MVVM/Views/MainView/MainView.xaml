@@ -177,7 +177,7 @@
                             
                             
                             Visibility="Visible"
-                            TextChanged="GuidelineText_TextChanged" Width="220" Height="50">
+                            Width="220" Height="50" Text="{Binding Path=MainWindowInputText, Mode=TwoWay}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderThickness" Value="0" />
@@ -206,6 +206,8 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
+                        
+                        <!--<Button Content="Process Text" Click="ProcessTextButton_Click" Width="20" Height="20" />-->
                     </Grid>
 
                 </Grid>

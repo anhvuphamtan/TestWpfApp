@@ -20,9 +20,7 @@ public partial class MainView : Window
         InitializeComponent();
         InitTrayIcon();
     }
-
-    private void GuidelineText_TextChanged(object sender, TextChangedEventArgs e) { }
-
+    
     private void InitTrayIcon()
     {
         _notifyIcon = new NotifyIcon();
