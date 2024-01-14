@@ -41,8 +41,39 @@ public class UIElementDetector
 
     public void SubscribeToElementFocusChanged()
     {
-        _focusChangedEventHandler = new AutomationFocusChangedEventHandler(OnElementFocusChanged);
-        Automation.AddAutomationFocusChangedEventHandler(_focusChangedEventHandler);
+        AutomationFocusChangedEventHandler focusChangedEventHandler = new AutomationFocusChangedEventHandler(OnElementFocusChanged);
+        Automation.AddAutomationFocusChangedEventHandler(focusChangedEventHandler);
+
+        Thread thread = new Thread(TunningPositionThread);
+        thread.Start();
+    }
+
+    private void TunningPositionThread(object? obj)
+    {
+        if (_popupDictionaryService != null)
+        {
+            try
+            {
+                while (true)
+                {
+                    if (_focusingElement != null)
+                    {
+                        _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
+                        _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
+                    }
+                    Thread.Sleep(500);
+                }
+            }
+            catch (ElementNotAvailableException)
+            {
+            }
+            catch (NullReferenceException)
+            {
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 
     public void UnSubscribeToElementFocusChanged()
