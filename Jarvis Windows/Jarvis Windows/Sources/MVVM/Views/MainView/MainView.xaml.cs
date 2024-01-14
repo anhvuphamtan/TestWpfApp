@@ -1,14 +1,10 @@
-﻿using Jarvis_Windows.Sources.Utils.Core;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 namespace Jarvis_Windows.Sources.MVVM.Views.MainView;
 public partial class MainView : Window
@@ -25,7 +21,10 @@ public partial class MainView : Window
     {
         _notifyIcon = new NotifyIcon();
         _contextMenuStrip = new ContextMenuStrip();
-        _notifyIcon.Icon = new System.Drawing.Icon("Assets/Icons/jarvis_icon.ico");
+
+        string relativePath = Path.Combine("Assets", "Icons", "jarvis_icon.ico");
+        string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
+        _notifyIcon.Icon = new System.Drawing.Icon(fullPath);
 
 
         _notifyIcon.MouseClick += NotifyIcon_MouseClick;
@@ -48,7 +47,8 @@ public partial class MainView : Window
 
     private void QuitMenuItem_Click(object sender, EventArgs e)
     {
-        System.Windows.Application.Current.Shutdown();
+        //System.Windows.Application.Current.Shutdown();
+        Process.GetCurrentProcess().Kill(); //DaiTT fix
     }
 
     private void OnExit(object sender, ExitEventArgs e)
