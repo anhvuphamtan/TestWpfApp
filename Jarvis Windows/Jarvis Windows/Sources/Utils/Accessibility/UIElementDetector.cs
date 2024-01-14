@@ -55,20 +55,27 @@ public class UIElementDetector
     {
         if (automationElement != null)
         {
-            Object patternObj;
-            if (automationElement.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
+            /*if (automationElement.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
             {
                 ValuePattern? valuePattern = patternObj as ValuePattern;
                 if (valuePattern != null)
+                {
+                    Debug.WriteLine($"���� IsReadOnly {valuePattern.Current.IsReadOnly}");
                     return true;
-            }
+                }
+            }*/
 
-            if (automationElement.TryGetCurrentPattern(TextPattern.Pattern, out patternObj))
+            Debug.WriteLine($"♾️♾️♾️ {automationElement.Current.ControlType.ProgrammaticName}");
+            if (automationElement.TryGetCurrentPattern(TextPattern.Pattern, out var patternObj))
             {
                 TextPattern? textPattern = patternObj as TextPattern;
                 if (textPattern != null)
-                    return true;
+                    return !(bool)textPattern.DocumentRange.GetAttributeValue(TextPattern.IsReadOnlyAttribute);
             }
+            else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Edit")) //Slack
+                return true;
+            else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Custom")) //Zalo
+                return true;
         }
         return false;
     }
@@ -78,18 +85,12 @@ public class UIElementDetector
         AutomationElement? newFocusElement = sender as AutomationElement;
         Debug.WriteLine($"↘️ ↘️ ↘️ Focused to : {newFocusElement?.Current.ControlType.ProgrammaticName}");
 
-        AutomationElement rootElement = AutomationElement.RootElement;
-        if (rootElement != null)
-        {
-            Debug.WriteLine($"🔗🔗🔗 Root Element: {newFocusElement?.Current.ControlType.ProgrammaticName}");
-        }
-
         if (newFocusElement != null)
         {
             if (IsEditableElement(newFocusElement))
             {
                 _focusingElement = newFocusElement;
-                SubscribeToElementPropertyChanged(_focusingElement, AutomationElement.BoundingRectangleProperty);
+                //SubscribeToElementPropertyChanged(_focusingElement, AutomationElement.BoundingRectangleProperty);
 
                 _popupDictionaryService.ShowJarvisAction(true);
                 _popupDictionaryService.ShowMenuOperations(false);
