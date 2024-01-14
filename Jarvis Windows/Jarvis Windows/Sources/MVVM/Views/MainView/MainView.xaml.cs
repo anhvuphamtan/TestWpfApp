@@ -22,7 +22,7 @@ public partial class MainView : Window
         _notifyIcon = new NotifyIcon();
         _contextMenuStrip = new ContextMenuStrip();
 
-        string relativePath = Path.Combine("Assets", "Icons", "jarvis_icon.ico");
+        string relativePath = Path.Combine("Assets", "Icons", "jarvis_logo_large.ico");
         string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
         _notifyIcon.Icon = new System.Drawing.Icon(fullPath);
 
