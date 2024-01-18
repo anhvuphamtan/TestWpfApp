@@ -24,21 +24,6 @@ namespace Jarvis_Windows.Sources.MVVM.Views.JarvisActionView
         public JarvisActionView()
         {
             InitializeComponent();
-            CreateAnimation();
-        }
-
-        private DoubleAnimation CreateAnimation()
-        {
-            DoubleAnimation rotateAnimation = new DoubleAnimation();
-            rotateAnimation.To = 360;
-            rotateAnimation.Duration = new Duration(TimeSpan.FromSeconds(1));
-            rotateAnimation.RepeatBehavior = RepeatBehavior.Forever;
-            rotateAnimation.AutoReverse = false;
-
-            Storyboard.SetTargetName(rotateAnimation, "rotateTransform");
-            Storyboard.SetTargetProperty(rotateAnimation, new PropertyPath(RotateTransform.AngleProperty));
-
-            return rotateAnimation;
         }
     }
 }

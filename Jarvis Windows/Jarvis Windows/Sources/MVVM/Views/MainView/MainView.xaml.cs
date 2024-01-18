@@ -1,28 +1,40 @@
-﻿using System;
+﻿//using Jarvis_Windows.Sources.Utils.Core;
+using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.IO;
-
+using Jarvis_Windows.Sources.DataAccess;
 namespace Jarvis_Windows.Sources.MVVM.Views.MainView;
 public partial class MainView : Window
 {
+    private bool _isMainWindowOpened;
     private NotifyIcon _notifyIcon;
     private ContextMenuStrip _contextMenuStrip;
+    private SendEventGA4 _sendEventGA4;
+
+    public SendEventGA4 SendEventGA4
+    {
+        get { return _sendEventGA4; }
+        set { _sendEventGA4 = value; }
+    }
+
     public MainView()
     {
         InitializeComponent();
         InitTrayIcon();
+
     }
-    
+
     private void InitTrayIcon()
     {
         _notifyIcon = new NotifyIcon();
         _contextMenuStrip = new ContextMenuStrip();
 
-        string relativePath = Path.Combine("Assets", "Icons", "jarvis_logo_large.ico");
+        string relativePath = Path.Combine("Assets", "Icons", "jarvis_icon.ico");
         string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
         _notifyIcon.Icon = new System.Drawing.Icon(fullPath);
 
@@ -30,27 +42,38 @@ public partial class MainView : Window
         _notifyIcon.MouseClick += NotifyIcon_MouseClick;
         _contextMenuStrip.Renderer = new MyRenderer();
 
-        // _contextMenuStrip.Items.Add("Open Jarvis main Window", null, QuitMenuItem_Click);
         _contextMenuStrip.Items.Add("Quit Jarvis", null, QuitMenuItem_Click);
 
         _notifyIcon.ContextMenuStrip = _contextMenuStrip;
         _notifyIcon.Visible = true;
     }
 
-    private void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+    private async void NotifyIcon_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Left)
         {
             this.Show();
+            this.Activate();
+            if (_isMainWindowOpened == false)
+                await SendEventGA4.SendEvent("open_main_window");
+
+            _isMainWindowOpened = true;
         }
     }
 
-    private void QuitMenuItem_Click(object sender, EventArgs e)
+    private async void QuitMenuItem_Click(object sender, EventArgs e)
     {
-        //System.Windows.Application.Current.Shutdown();
-        Process.GetCurrentProcess().Kill(); //DaiTT fix
-    }
+        try 
+        {
+            await SendEventGA4.SendEvent("quit_app");
+            Process.GetCurrentProcess().Kill(); //DaiTT fix
+        }
 
+        catch (Exception ex) 
+        {
+            System.Windows.MessageBox.Show(ex.Message);
+        }
+    }
     private void OnExit(object sender, ExitEventArgs e)
     {
         _notifyIcon.Visible = false;
@@ -59,6 +82,7 @@ public partial class MainView : Window
 
     private void btnCloseMainWindows_Click(object sender, RoutedEventArgs e)
     {
+        _isMainWindowOpened = false;
         this.Hide();
     }
 
@@ -85,5 +109,6 @@ public partial class MainView : Window
             }
         }
     }
+
 
 }

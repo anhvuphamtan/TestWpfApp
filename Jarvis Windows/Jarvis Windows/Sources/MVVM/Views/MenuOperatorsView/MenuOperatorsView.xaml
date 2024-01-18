@@ -13,7 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Border CornerRadius="20" BorderBrush="White" BorderThickness="2">
         <Border.Background>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -35,7 +35,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row ="1" Width="376" Height="37" Margin="12 0 12 0">   
+            <Grid Grid.Row ="1" Width="376" Height="37" Margin="12 0 12 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="78"/>
                     <ColumnDefinition Width="9"/>
@@ -169,16 +169,16 @@
                                     </ComboBox>
                                 </StackPanel>
                             </Button>
-                            
-                            
+
+
                         </Border>
-                        
+
                     </Grid>
 
                     <Grid Grid.Column="2">
                         <Border Height="36" CornerRadius="10" BorderBrush="#EEEEEE" BorderThickness="0"
                                 Background="#FFFFFF">
-                            
+
                             <Button Width="121" Height="36" 
                                 Style="{StaticResource JarvisOperationButton}"
                                 Command="{Binding ReviseCommand}">
@@ -198,14 +198,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="118"/>
                         <ColumnDefinition Width="258"/>
-                        
+
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
-                        
+
                         <Border Width="118" Height="36" CornerRadius="10" BorderBrush="#EEEEEE" BorderThickness="0" Background="#FFFFFF">
                             <Button Width="118" Height="36" 
                                 Style="{StaticResource JarvisOperationButton}"
-                                Command="{Binding ShortenCommand}">  
+                                Command="{Binding ShortenCommand}">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Margin="0 0 10 0" Source="../../../../Assets/Images/scissors.png" Width="20" Height="20" VerticalAlignment="Center"/>
 
@@ -219,7 +219,7 @@
 
                 </Grid>
             </Grid>
-            
+
         </Grid>
 
 

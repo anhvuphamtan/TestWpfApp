@@ -3,6 +3,7 @@ using Jarvis_Windows.Sources.Utils.Accessibility;
 using Jarvis_Windows.Sources.Utils.Constants;
 using Jarvis_Windows.Sources.Utils.Core;
 using Jarvis_Windows.Sources.Utils.Services;
+using Jarvis_Windows.Sources.Utils.EventAggregator;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -10,10 +11,11 @@ using Newtonsoft.Json;
 using System.Windows.Documents;
 using Jarvis_Windows.Sources.MVVM.Models;
 using System.Collections.Generic;
-using System.Net.Http.Json;
 using System.IO;
-using System.Windows.Media.Animation;
 using Jarvis_Windows.Sources.MVVM.Views.MainView;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Gma.System.MouseKeyHook;
 
 namespace Jarvis_Windows.Sources.MVVM.ViewModels;
 
@@ -24,6 +26,9 @@ public class MainViewModel : ViewModelBase
     private UIElementDetector _uIElementDetector;
     private bool _isSpinningJarvisIcon; // Spinning Jarvis icon
     private string _mainWindowInputText;
+    private IKeyboardMouseEvents globalHook;
+
+    private SendEventGA4 _sendEventGA4;
     public List<Language> Languages { get; set; }
     public RelayCommand ShowMenuOperationsCommand { get; set; }
     public RelayCommand HideMenuOperationsCommand { get; set; }
@@ -63,16 +68,6 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    public string MainWindowInputText
-    {
-        get { return _mainWindowInputText; }
-        set
-        {
-            _mainWindowInputText = value;
-            OnPropertyChanged();
-        }
-    }
-
     // Spinning Jarvis icon
     public bool IsSpinningJarvisIcon
     {
@@ -84,12 +79,34 @@ public class MainViewModel : ViewModelBase
         }
     }
 
-    public MainViewModel(INavigationService navigationService, PopupDictionaryService popupDictionaryService, UIElementDetector uIElementDetector)
+    public string MainWindowInputText
+    {
+        get { return _mainWindowInputText; }
+        set
+        {
+            _mainWindowInputText = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public SendEventGA4 SendEventGA4
+    {
+        get { return _sendEventGA4; }
+        set
+        {
+            _sendEventGA4 = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public MainViewModel(INavigationService navigationService, PopupDictionaryService popupDictionaryService, UIElementDetector uIElementDetector, SendEventGA4 sendEventGA4)
     {
         NavigationService = navigationService;
         PopupDictionaryService = popupDictionaryService;
         UIElementDetector = uIElementDetector;
-        ShowMenuOperationsCommand = new RelayCommand(o => { PopupDictionaryService.ShowMenuOperations(true); }, o => true);
+        SendEventGA4 = sendEventGA4;
+
+        ShowMenuOperationsCommand = new RelayCommand(ExecuteShowMenuOperationsCommand, o => true);
         HideMenuOperationsCommand = new RelayCommand(o => { PopupDictionaryService.ShowMenuOperations(false); }, o => true);
         ReviseCommand = new RelayCommand(ExecuteReviseCommand, o => true);
         ShortenCommand = new RelayCommand(ExecuteShortenCommand, o => true);
@@ -100,22 +117,43 @@ public class MainViewModel : ViewModelBase
         string relativePath = Path.Combine("Appsettings", "Configs", "languages_supported.json");
         string fullPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath));
         string jsonContent = "";
-        
-        if (File.Exists(fullPath))
-        {
-            jsonContent = File.ReadAllText(fullPath);
-        }
-        // Console.WriteLine("Full Path: " + jsonContent);
+        jsonContent = File.ReadAllText(fullPath);
 
         Languages = JsonConvert.DeserializeObject<List<Language>>(jsonContent);
 
         //Register Acceccibility service
         UIElementDetector.SubscribeToElementFocusChanged();
+
+        EventAggregator.LanguageSelectionChanged += OnLanguageSelectionChanged;
+
+        // Checking App update here
+        try
+        {
+            ExecuteCheckUpdate();
+        }
+
+        catch { }
+        finally { ExecuteSendEventOpenMainWindow(); }
+
+        globalHook = Hook.GlobalEvents();
+        globalHook.MouseDown += GlobalHook_MouseDown;
+    }
+
+    private void OnLanguageSelectionChanged(object sender, EventArgs e)
+    {
+        ExecuteTranslateCommand(sender);
     }
 
     private void ExecuteQuitAppCommand(object obj)
     {
-        Application.Current.Shutdown();
+        Process.GetCurrentProcess().Kill();
+        Task.Run(async () =>
+        {
+            // Some processing before the await (if needed)
+            await Task.Delay(0); // This allows the method to yield to the caller
+
+            await SendEventGA4.SendEvent("quit_app");
+        });
     }
 
     private void ExecuteOpenSettingsCommand(object obj)
@@ -123,46 +161,71 @@ public class MainViewModel : ViewModelBase
         throw new NotImplementedException();
     }
 
-    private async void ExecuteTranslateCommand(object obj)
+    private void GlobalHook_MouseDown(object sender, MouseEventArgs e)
     {
-        try
-        {
-            IsSpinningJarvisIcon = true; // Start spinning animation
-            // Trigger here
-            HideMenuOperationsCommand.Execute(null);
-            
-            var textFromElement = "";
-            try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
-            catch { textFromElement = this.MainWindowInputText; }
+        //if (e.Button == MouseButtons.Left && _popupDictionaryService.IsShowMenuOperations)
+        //{
+        //    PresentationSource source = PresentationSource.FromVisual(System.Windows.Application.Current.MainWindow);
+        //    Point mousePos = source.CompositionTarget.TransformFromDevice.Transform(new Point(e.X, e.Y));
+        //    // Point mousePos = new Point(e.X, e.Y);
+        //    Point JarvisMenuPosition = UIElementDetector.PopupDictionaryService.MenuOperationsPosition;
 
-            var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
-            
-            if(textFromAPI == string.Empty)
+        //    double X1 = JarvisMenuPosition.X;
+        //    double Y1 = JarvisMenuPosition.Y;
+        //    double X2 = X1 + 400;
+        //    double Y2 = Y1 + 165;
+        //    if ((mousePos.X < X1 || mousePos.X > X2 || mousePos.Y < Y1 || mousePos.Y > Y2) && (X1 != 0 && Y1 != 0))
+        //        HideMenuOperationsCommand.Execute(null);
+        //}
+    }
+
+    private async void ExecuteCheckUpdate()
+    {
+        // Checking App update here
+        await SendEventGA4.CheckVersion();
+    }
+
+    private async void ExecuteSendEventOpenMainWindow()
+    {
+        // Starting app
+        await SendEventGA4.SendEvent("open_main_window");
+    }
+
+    public async void ExecuteShowMenuOperationsCommand(object obj)
+    {
+        bool _menuShowStatus = PopupDictionaryService.IsShowMenuOperations;
+        PopupDictionaryService.ShowMenuOperations(!_menuShowStatus);
+
+        if (_menuShowStatus == false)
+        {
+            await Task.Run(async () =>
             {
-                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
-                return;
-            }
+                // Some processing before the await (if needed)
+                await Task.Delay(0); // This allows the method to yield to the caller
 
-            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
-            catch { MainWindowInputText = textFromAPI; }
-        }
-        catch { }
-        finally
-        {
-            IsSpinningJarvisIcon = false; // Stop spinning animation
+                await SendEventGA4.SendEvent("open_input_actions");
+            });
         }
     }
 
-    private async void ExecuteReviseCommand(object obj)
+    public async void ExecuteTranslateCommand(object obj)
     {
         try
         {
-            IsSpinningJarvisIcon = true; // Start spinning animation
+            bool _fromWindow = false;
+            // Trigger here
             HideMenuOperationsCommand.Execute(null);
+            IsSpinningJarvisIcon = true; // Start spinning animation
 
             var textFromElement = "";
             try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
-            catch { textFromElement = this.MainWindowInputText; }
+            catch
+            {
+                textFromElement = this.MainWindowInputText;
+                _fromWindow = true;
+            }
+
+            if (textFromElement == "") return;
 
             var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
 
@@ -172,14 +235,50 @@ public class MainViewModel : ViewModelBase
                 return;
             }
 
-            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
-            catch { MainWindowInputText = textFromAPI; }
+            if (_fromWindow != true) { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
+            else { MainWindowInputText = textFromAPI; }
+        }
+        catch { }
+        finally
+        {
+            IsSpinningJarvisIcon = false; // Stop spinning animation
+            await SendEventGA4.SendEvent("do_ai_action", new Tuple<string, string>("translate", PopupDictionaryService.TargetLangguage));
+        }
+    }
+
+    private async void ExecuteReviseCommand(object obj)
+    {
+        try
+        {
+            bool _fromWindow = false;
+            HideMenuOperationsCommand.Execute(null);
+            IsSpinningJarvisIcon = true; // Start spinning animation
+
+            var textFromElement = "";
+            try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
+            catch
+            {
+                textFromElement = this.MainWindowInputText;
+                _fromWindow = true;
+            }
+
+            var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
+
+            if (textFromAPI == string.Empty)
+            {
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.reviseError}");
+                return;
+            }
+
+            if (_fromWindow != true) { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.reviseError); }
+            else { MainWindowInputText = textFromAPI; }
 
 
         }
         catch { }
         finally
         {
+            await SendEventGA4.SendEvent("do_ai_action", new Tuple<string, string>("revise", ""));
             IsSpinningJarvisIcon = false; // Stop spinning animation
         }
     }
@@ -188,28 +287,33 @@ public class MainViewModel : ViewModelBase
     {
         try
         {
-            IsSpinningJarvisIcon = true; // Start spinning animation
-            //_popupDictionaryService.ShowMenuOperations(false);
+            bool _fromWindow = false;
             HideMenuOperationsCommand.Execute(null);
+            IsSpinningJarvisIcon = true; // Start spinning animation
 
             var textFromElement = "";
             try { textFromElement = UIElementDetector.GetTextFromFocusingEditElement(); }
-            catch { textFromElement = this.MainWindowInputText; }
+            catch
+            {
+                textFromElement = this.MainWindowInputText;
+                _fromWindow = true;
+            }
 
-            var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
+            var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
 
             if (textFromAPI == string.Empty)
             {
-                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
+                Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.shortennError}");
                 return;
             }
 
-            try { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
-            catch { MainWindowInputText = textFromAPI; }
+            if (_fromWindow != true) { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.shortennError); }
+            else { MainWindowInputText = textFromAPI; }
         }
         catch { }
         finally
         {
+            await SendEventGA4.SendEvent("do_ai_action", new Tuple<string, string>("shorten", ""));
             IsSpinningJarvisIcon = false; // Stop spinning animation
         }
     }

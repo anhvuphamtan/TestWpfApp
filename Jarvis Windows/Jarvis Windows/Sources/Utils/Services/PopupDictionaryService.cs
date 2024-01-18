@@ -102,6 +102,7 @@ public class PopupDictionaryService : ObserveralObject
                 {
                     visualPos.X = visualPos.X - 200;
                     visualPos.Y = visualPos.Y - 180;
+                    
                 }
                 
                 MenuOperationsPosition = visualPos;

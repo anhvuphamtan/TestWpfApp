@@ -7,6 +7,8 @@ using Jarvis_Windows.Sources.Utils.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
+using Jarvis_Windows.Sources.DataAccess;
+using System.IO;
 
 namespace Jarvis_Windows;
 
@@ -17,33 +19,58 @@ public partial class App : Application
     public App()
     {
         IServiceCollection services = new ServiceCollection();
-        
+
         services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
         services.AddSingleton<INavigationService, NavigationService>();
-        services.AddSingleton<PopupDictionaryService>();
+        services.AddSingleton<PopupDictionaryService>();     
+        services.AddSingleton<SendEventGA4>();
+
         services.AddSingleton<UIElementDetector>(provider => new UIElementDetector
         {
-            PopupDictionaryService = _serviceProvider.GetRequiredService<PopupDictionaryService>()
+            PopupDictionaryService = _serviceProvider.GetRequiredService<PopupDictionaryService>(),
+            SendEventGA4 = provider.GetRequiredService<SendEventGA4>()
         });
+
+
         services.AddSingleton<MainViewModel>();
-        services.AddSingleton<MainView>(proider => new MainView
+        // Logging.Log("Before MainView MainviewModel");
+        services.AddSingleton<MainView>(provider => new MainView
         {
-            DataContext = proider.GetRequiredService<MainViewModel>()
+            DataContext = provider.GetRequiredService<MainViewModel>(),
+            SendEventGA4 = provider.GetRequiredService<SendEventGA4>()
         });
-        
+
+        // Logging.Log("After MainView MainviewModel\n");
+
         services.AddSingleton<JarvisActionViewModel>(provider => new JarvisActionViewModel
         {
             PopupDictionaryService = _serviceProvider.GetRequiredService<PopupDictionaryService>()
         });
 
+
+
         _serviceProvider = services.BuildServiceProvider();
     }
 
+
     protected void OnStartup(object sender, StartupEventArgs e)
     {
-        MainView mainView = _serviceProvider.GetRequiredService<MainView>();
-        mainView.Show();
+        // Logging.Log("Before mainview OnStartup");
+        try
+        {
+            MainView mainView = _serviceProvider.GetRequiredService<MainView>();
+            // Logging.Log("After 1 mainview OnStartup");
+            mainView.Show();
 
-        _serviceProvider.GetRequiredService<PopupDictionaryService>().MainWindow = mainView;
+            // Logging.Log("After 2 mainview OnStartup");
+            _serviceProvider.GetRequiredService<PopupDictionaryService>().MainWindow = mainView;
+            // Logging.Log("After 3 mainview OnStartup");
+
+        }
+
+        catch (Exception ex)
+        {
+            
+        }
     }
 }

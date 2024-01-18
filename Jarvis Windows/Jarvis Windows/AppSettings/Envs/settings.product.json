@@ -1,3 +1,9 @@
 {
-  "ApiUrl": "https://api.jarvis.cx/ai-ask/"
+  "ApiUrl": "https://api.dev.jarvis.cx/ai-ask/",
+  "MeasurementID": "G-9CN2KP5RKE",
+  "ApiSecret": "tP4i0zpPRsK-uLEnTNEpFQ",
+  "ClientID": "",
+  "UserID": "",
+  "SessionID": "",
+  "SessionTimestamp": "0"
 }

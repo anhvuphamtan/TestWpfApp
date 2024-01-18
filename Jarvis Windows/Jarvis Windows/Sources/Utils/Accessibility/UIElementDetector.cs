@@ -16,7 +16,7 @@ public class UIElementDetector
     private AutomationElement? _focusingElement;
     AutomationFocusChangedEventHandler? _focusChangedEventHandler;
     private PopupDictionaryService _popupDictionaryService;
-
+    private SendEventGA4 _sendEventGA4;
     public PopupDictionaryService PopupDictionaryService
     {
         get { return _popupDictionaryService; }
@@ -28,6 +28,12 @@ public class UIElementDetector
         if (Instance == null)
             Instance = new UIElementDetector();
         return Instance;
+    }
+
+    public SendEventGA4 SendEventGA4
+    {
+        get { return _sendEventGA4; }
+        set => _sendEventGA4 = value;
     }
 
     private UIElementDetector(PopupDictionaryService popupDictionaryService)
@@ -111,15 +117,23 @@ public class UIElementDetector
         return false;
     }
 
+    private async Task ExecuteSendEventInject()
+    {   
+        await SendEventGA4.SendEvent("inject_input_actions");       
+    }
+
     private void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
     {
         AutomationElement? newFocusElement = sender as AutomationElement;
         Debug.WriteLine($"↘️ ↘️ ↘️ Focused to : {newFocusElement?.Current.ControlType.ProgrammaticName}");
 
-        if (newFocusElement != null)
+        if (newFocusElement != null && newFocusElement != _focusingElement)
         {
-            if (IsEditableElement(newFocusElement))
+            bool _isEditableElement = IsEditableElement(newFocusElement);
+            if (_isEditableElement)
             {
+                AutomationElement curFocusElement = _focusingElement;
+
                 _focusingElement = newFocusElement;
                 //SubscribeToElementPropertyChanged(_focusingElement, AutomationElement.BoundingRectangleProperty);
 
@@ -127,6 +141,7 @@ public class UIElementDetector
                 _popupDictionaryService.ShowMenuOperations(false);
                 _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
                 _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
+                Task.Run(async () => await ExecuteSendEventInject());
             }
             else
             {

@@ -1,6 +1,8 @@
 ﻿using Jarvis_Windows.Sources.MVVM.Models;
+using Jarvis_Windows.Sources.MVVM.ViewModels;
 using Jarvis_Windows.Sources.Utils.Core;
 using Jarvis_Windows.Sources.Utils.Services;
+using Jarvis_Windows.Sources.Utils.EventAggregator;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
 {
@@ -26,7 +29,8 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
     /// </summary>
     public partial class MenuOperatorsView : UserControl
     {
-        private int _languageSelectedIndex = 0;
+        private int _languageSelectedIndex = 14;
+        private bool isInit = false;
         public MenuOperatorsView()
         {
             InitializeComponent();
@@ -40,7 +44,7 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
             };
         }
 
-        private void languageComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void languageComboBox_SelectionChanged(object sender, EventArgs e)
         {
             if (sender is ComboBox comboBox)
             {
@@ -48,9 +52,16 @@ namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView
                 {
                     PopupDictionaryService.TargetLangguage = ((Language)comboBox.SelectedItem).Value;
                     _languageSelectedIndex = comboBox.SelectedIndex;
+
+                    comboBox.IsDropDownOpen = false;
+                    if (isInit)
+                        EventAggregator.PublishLanguageSelectionChanged(this, EventArgs.Empty);
                     
+                    isInit = true;
                 }
             }
         }
+
+
     }
 }
