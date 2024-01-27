@@ -4,7 +4,6 @@ using System.Windows;
 using Jarvis_Windows.Sources.Utils.Services;
 using Jarvis_Windows.Sources.Utils.WindowsAPI;
 using System.Diagnostics;
-using System.Xaml;
 using System.Threading.Tasks;
 using System.Threading;
 
@@ -13,14 +12,27 @@ namespace Jarvis_Windows.Sources.Utils.Accessibility;
 public class UIElementDetector
 {
     private static UIElementDetector? Instance;
-    private AutomationElement? _focusingElement;
-    AutomationFocusChangedEventHandler? _focusChangedEventHandler;
-    private PopupDictionaryService _popupDictionaryService;
-    private SendEventGA4 _sendEventGA4;
-    public PopupDictionaryService PopupDictionaryService
+    private static AutomationElement? _focusingElement;
+    private static AutomationFocusChangedEventHandler? _focusChangedEventHandler = new AutomationFocusChangedEventHandler(OnElementFocusChanged);
+
+    private static PopupDictionaryService? _popupDictionaryService;
+    private static SendEventGA4? _sendEventGA4;
+    private static bool _isUseAutoTuningPosition = true;
+    public PopupDictionaryService? PopupDictionaryService
     {
         get { return _popupDictionaryService; }
         set => _popupDictionaryService = value;
+    }
+
+    public static bool IsUseAutoTuningPosition { 
+        get => _isUseAutoTuningPosition; 
+        set => _isUseAutoTuningPosition = value; 
+    }
+
+    public AutomationFocusChangedEventHandler? FocusChangedEventHandler
+    {
+        get { return _focusChangedEventHandler; }
+        set => _focusChangedEventHandler = value;
     }
 
     public static UIElementDetector GetInstance()
@@ -30,7 +42,7 @@ public class UIElementDetector
         return Instance;
     }
 
-    public SendEventGA4 SendEventGA4
+    public SendEventGA4? SendEventGA4
     {
         get { return _sendEventGA4; }
         set => _sendEventGA4 = value;
@@ -47,11 +59,10 @@ public class UIElementDetector
 
     public void SubscribeToElementFocusChanged()
     {
-        AutomationFocusChangedEventHandler focusChangedEventHandler = new AutomationFocusChangedEventHandler(OnElementFocusChanged);
-        Automation.AddAutomationFocusChangedEventHandler(focusChangedEventHandler);
-
-        Thread thread = new Thread(TunningPositionThread);
-        thread.Start();
+        Automation.AddAutomationFocusChangedEventHandler(_focusChangedEventHandler);
+        Thread tuningJarivsPositionThread = new Thread(TunningPositionThread);
+        tuningJarivsPositionThread.Name = "Jarvis Position Tuning";
+        tuningJarivsPositionThread.Start();
     }
 
     private void TunningPositionThread(object? obj)
@@ -62,12 +73,12 @@ public class UIElementDetector
             {
                 while (true)
                 {
-                    if (_focusingElement != null)
+                    if (_focusingElement != null && IsUseAutoTuningPosition)
                     {
                         _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
                         _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
                     }
-                    Thread.Sleep(500);
+                    Thread.Sleep(33);
                 }
             }
             catch (ElementNotAvailableException)
@@ -88,60 +99,40 @@ public class UIElementDetector
         Automation.RemoveAutomationFocusChangedEventHandler(_focusChangedEventHandler);
     }
 
-    private bool IsEditableElement(AutomationElement? automationElement)
+    private static bool IsEditableElement(AutomationElement? automationElement)
     {
         if (automationElement != null)
         {
-            /*if (automationElement.TryGetCurrentPattern(ValuePattern.Pattern, out patternObj))
-            {
-                ValuePattern? valuePattern = patternObj as ValuePattern;
-                if (valuePattern != null)
-                {
-                    Debug.WriteLine($"���� IsReadOnly {valuePattern.Current.IsReadOnly}");
-                    return true;
-                }
-            }*/
-
-            Debug.WriteLine($"♾️♾️♾️ {automationElement.Current.ControlType.ProgrammaticName}");
-            if (automationElement.TryGetCurrentPattern(TextPattern.Pattern, out var patternObj))
-            {
-                TextPattern? textPattern = patternObj as TextPattern;
-                if (textPattern != null)
-                    return !(bool)textPattern.DocumentRange.GetAttributeValue(TextPattern.IsReadOnlyAttribute);
-            }
-            else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Edit")) //Slack
+            if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Edit"))
                 return true;
-            else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Custom")) //Zalo
+            else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Custom"))
                 return true;
+            /*else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Document"))
+                return true;*/
         }
         return false;
     }
 
-    private async Task ExecuteSendEventInject()
+    private static async Task ExecuteSendEventInject()
     {   
-        await SendEventGA4.SendEvent("inject_input_actions");       
+        await _sendEventGA4.SendEvent("inject_input_actions");       
     }
 
-    private void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
+    private static void OnElementFocusChanged(object sender, AutomationFocusChangedEventArgs e)
     {
         AutomationElement? newFocusElement = sender as AutomationElement;
-        Debug.WriteLine($"↘️ ↘️ ↘️ Focused to : {newFocusElement?.Current.ControlType.ProgrammaticName}");
 
-        if (newFocusElement != null && newFocusElement != _focusingElement)
+        if (newFocusElement != null && newFocusElement != _focusingElement/* && e.ObjectId >= 0*/)
         {
-            bool _isEditableElement = IsEditableElement(newFocusElement);
-            if (_isEditableElement)
+            if (IsEditableElement(newFocusElement))
             {
-                AutomationElement curFocusElement = _focusingElement;
-
                 _focusingElement = newFocusElement;
-                //SubscribeToElementPropertyChanged(_focusingElement, AutomationElement.BoundingRectangleProperty);
 
                 _popupDictionaryService.ShowJarvisAction(true);
                 _popupDictionaryService.ShowMenuOperations(false);
                 _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
                 _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
-                Task.Run(async () => await ExecuteSendEventInject());
+                Debug.WriteLine("📩📩📩 Send GA4 Events Inject");
             }
             else
             {
@@ -179,7 +170,7 @@ public class UIElementDetector
         }
     }
 
-    private Point CalculateElementLocation()
+    private static Point CalculateElementLocation()
     {
         Point placementPoint = new Point(0, 0);
         if (_focusingElement != null)
@@ -187,8 +178,18 @@ public class UIElementDetector
             try
             {
                 Rect elementRectBounding = _focusingElement.Current.BoundingRectangle;
-                placementPoint.X = elementRectBounding.Left + elementRectBounding.Width;
-                placementPoint.Y = elementRectBounding.Top + elementRectBounding.Height * 0.5;
+                if(elementRectBounding.X <0 || elementRectBounding.Y < 0)
+                {
+                    _popupDictionaryService.ShowJarvisAction(false);
+                    _popupDictionaryService.ShowMenuOperations(false);
+                    placementPoint.X = 0;
+                    placementPoint.Y = 0;
+                }
+                else
+                {
+                    placementPoint.X = elementRectBounding.Left + elementRectBounding.Width;
+                    placementPoint.Y = elementRectBounding.Top + elementRectBounding.Height * 0.5;
+                }
             }
             catch (NullReferenceException)
             {
