@@ -5,6 +5,7 @@ using Jarvis_Windows.Sources.Utils.Accessibility;
 using Jarvis_Windows.Sources.Utils.Core;
 using Jarvis_Windows.Sources.Utils.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 using System;
 using System.Windows;
 using Jarvis_Windows.Sources.DataAccess;
@@ -54,6 +55,7 @@ public partial class App : Application
         });
 
         _serviceProvider = services.BuildServiceProvider();
+        SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
     }
 
 
@@ -69,7 +71,6 @@ public partial class App : Application
             // Logging.Log("After 2 mainview OnStartup");
             _serviceProvider.GetRequiredService<PopupDictionaryService>().MainWindow = mainView;
             // Logging.Log("After 3 mainview OnStartup");
-
         }
 
         catch (Exception ex)
@@ -116,5 +117,18 @@ public partial class App : Application
             }
         })
         .Start();
+    }
+
+
+    static void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+    {
+        if (e.Mode == PowerModes.Suspend)
+        {
+            UIElementDetector.GetInstance().UnSubscribeToElementFocusChanged();
+        }
+        else if (e.Mode == PowerModes.Resume)
+        {
+            UIElementDetector.GetInstance().SubscribeToElementFocusChanged();
+        }
     }
 }
