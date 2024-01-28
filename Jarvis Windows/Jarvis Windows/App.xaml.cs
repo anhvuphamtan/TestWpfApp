@@ -9,15 +9,21 @@ using System;
 using System.Windows;
 using Jarvis_Windows.Sources.DataAccess;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Jarvis_Windows;
 
 public partial class App : Application
 {
     private ServiceProvider _serviceProvider;
+    private const string _uniqueEventName = "Jarvis Windows";
+    private EventWaitHandle _eventWaitHandle;
 
     public App()
     {
+        SingleInstanceWatcher();
+
         IServiceCollection services = new ServiceCollection();
 
         services.AddSingleton<Func<Type, ViewModelBase>>(serviceProvider => viewModelType => (ViewModelBase)serviceProvider.GetRequiredService(viewModelType));
@@ -47,8 +53,6 @@ public partial class App : Application
             PopupDictionaryService = _serviceProvider.GetRequiredService<PopupDictionaryService>()
         });
 
-
-
         _serviceProvider = services.BuildServiceProvider();
     }
 
@@ -72,5 +76,45 @@ public partial class App : Application
         {
             
         }
+    }
+
+    private void SingleInstanceWatcher()
+    {
+        try
+        {
+            this._eventWaitHandle = EventWaitHandle.OpenExisting(_uniqueEventName);
+            this._eventWaitHandle.Set();
+            this.Shutdown();
+        }
+        catch (WaitHandleCannotBeOpenedException)
+        {
+            this._eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, _uniqueEventName);
+        }
+
+        new Task(() =>
+        {
+            while (this._eventWaitHandle.WaitOne())
+            {
+                Current.Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    if (!Current.MainWindow.Equals(null))
+                    {
+                        var mw = Current.MainWindow;
+
+                        if (mw.WindowState == WindowState.Minimized || mw.Visibility != Visibility.Visible)
+                        {
+                            mw.Show();
+                            mw.WindowState = WindowState.Normal;
+                        }
+
+                        mw.Activate();
+                        mw.Topmost = true;
+                        mw.Topmost = false;
+                        mw.Focus();
+                    }
+                }));
+            }
+        })
+        .Start();
     }
 }
