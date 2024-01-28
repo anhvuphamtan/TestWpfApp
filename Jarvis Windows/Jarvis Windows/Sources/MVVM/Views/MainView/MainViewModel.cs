@@ -229,7 +229,7 @@ public class MainViewModel : ViewModelBase
 
             var textFromAPI = await JarvisApi.Instance.TranslateHandler(textFromElement, PopupDictionaryService.TargetLangguage);
 
-            if (textFromAPI == string.Empty)
+            if (textFromAPI == null)
             {
                 Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.translateError}");
                 return;
@@ -264,7 +264,7 @@ public class MainViewModel : ViewModelBase
 
             var textFromAPI = await JarvisApi.Instance.ReviseHandler(textFromElement);
 
-            if (textFromAPI == string.Empty)
+            if (textFromAPI == null)
             {
                 Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.reviseError}");
                 return;
@@ -301,7 +301,7 @@ public class MainViewModel : ViewModelBase
 
             var textFromAPI = await JarvisApi.Instance.ShortenHandler(textFromElement);
 
-            if (textFromAPI == string.Empty)
+            if (textFromAPI == null)
             {
                 Debug.WriteLine($"🆘🆘🆘 {ErrorConstant.shortennError}");
                 return;
