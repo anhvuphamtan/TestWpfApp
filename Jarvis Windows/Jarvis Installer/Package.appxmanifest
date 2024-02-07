@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="46f0dd9d-655f-46be-a202-2e5928661cbe"
-    Publisher="CN=Jarvis Dev"
+    Name="4063jarvis.cx.JarvisAIChatGPTBingClaudeBardBOT"
+    Publisher="CN=8408F21D-68E8-4019-8C6D-5334D8970E1A"
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Jarvis Copilot</DisplayName>
-    <PublisherDisplayName>DaiDev</PublisherDisplayName>
+    <DisplayName>Jarvis AI: Chat GPT, Bing, Claude, Bard, BOT</DisplayName>
+    <PublisherDisplayName>jarvis.cx</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Jarvis Copilot"
-        Description="Jarvis: AI Copilot Chat GPT4"
+        DisplayName="Jarvis AI: Chat GPT, Bing, Claude, Bard, BOT"
+        Description="Jarvis AI Copilot Chatbot by ChatGPT, OpenAI, Claude, Midjourney : Translate English, Chat Chatting GPT, Check Grammar, Rewrite, XAI"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">

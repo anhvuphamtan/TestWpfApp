@@ -9,6 +9,11 @@
     <Configurations>Debug;Release;Dev;Product</Configurations>
     <ApplicationIcon>Assets\Icons\jarvis_icon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Company>Jarvis AI</Company>
+    <Authors>Jarvis AI</Authors>
+    <Product>Jarvis AI</Product>
+    <PackageId>JarvisAI</PackageId>
+    <Title>Jarvis AI</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
