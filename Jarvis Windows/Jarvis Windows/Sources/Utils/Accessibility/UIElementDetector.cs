@@ -133,6 +133,7 @@ public class UIElementDetector
                 _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
                 _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
                 Debug.WriteLine("📩📩📩 Send GA4 Events Inject");
+                Task.Run(async () => await ExecuteSendEventInject());
             }
             else
             {
