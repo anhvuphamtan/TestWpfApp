@@ -19,7 +19,7 @@ public sealed class JarvisApi
     private JarvisApi()
     {
         _client = new HttpClient();
-        _apiUrl = DataConfiguration.ApiUrl;
+        _apiUrl = DataConfiguration.ApiUrl + "/ai-ask/";
         //_apiUrl = "https://api.jarvis.cx/ai-ask/";
     }
 
