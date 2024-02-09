@@ -12,7 +12,7 @@
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Jarvis AI: Chat GPT, Bing, Claude, Bard, BOT</DisplayName>
+    <DisplayName>Jarvis AI: Chat GPT Bot Assistant &amp; AI Copilot</DisplayName>
     <PublisherDisplayName>jarvis.cx</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -31,7 +31,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Jarvis AI: Chat GPT, Bing, Claude, Bard, BOT"
+        DisplayName="Jarvis AI: Chat GPT Bot Assistant &amp; AI Copilot"
         Description="Jarvis AI Copilot Chatbot by ChatGPT, OpenAI, Claude, Midjourney : Translate English, Chat Chatting GPT, Check Grammar, Rewrite, XAI"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
