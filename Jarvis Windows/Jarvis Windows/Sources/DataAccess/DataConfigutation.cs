@@ -17,7 +17,7 @@ namespace Jarvis_Windows.Sources.DataAccess
             #if DEBUG
             environment = "dev";
             #elif RELEASE
-            environment = "dev";
+            environment = "product";
             #elif DEV
             environment = "dev";
             #elif PRODUCT

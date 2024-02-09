@@ -54,14 +54,17 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Product|AnyCPU'">
     <DefineConstants>$(DefineConstants);PRODUCT</DefineConstants>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Product|x86'">
     <DefineConstants>$(DefineConstants);PRODUCT</DefineConstants>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Product|x64'">
     <DefineConstants>$(DefineConstants);PRODUCT</DefineConstants>
+    <Optimize>True</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
