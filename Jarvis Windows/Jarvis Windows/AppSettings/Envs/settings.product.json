@@ -4,6 +4,8 @@
   "ApiSecret": "klurR_9CQiSt8cyyeNxaqA",
   "ClientID": "",
   "UserID": "",
+  "ApiHeaderID": "",
+  "ApiUsageRemaining": 0,
   "SessionID": "",
   "SessionTimestamp": "0"
 }

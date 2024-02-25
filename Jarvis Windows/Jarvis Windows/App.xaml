@@ -10,5 +10,9 @@
         <DataTemplate DataType="{x:Type TypeName=viewModel:MainViewModel}">
             <mainView:MainView/>
         </DataTemplate>
+
+
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
+        
     </Application.Resources>
 </Application>

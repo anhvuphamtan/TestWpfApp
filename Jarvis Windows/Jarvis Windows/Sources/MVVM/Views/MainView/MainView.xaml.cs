@@ -2,12 +2,9 @@
 using System;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.IO;
-using Jarvis_Windows.Sources.DataAccess;
 namespace Jarvis_Windows.Sources.MVVM.Views.MainView;
 public partial class MainView : Window
 {
@@ -26,7 +23,6 @@ public partial class MainView : Window
     {
         InitializeComponent();
         InitTrayIcon();
-
     }
 
     private void InitTrayIcon()

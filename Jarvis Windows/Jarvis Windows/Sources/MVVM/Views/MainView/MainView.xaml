@@ -24,10 +24,26 @@
 
     <Border CornerRadius="20" BorderBrush="White" BorderThickness="1"  Padding="20,20">
         <Border.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <RotateTransform CenterY="0.5" CenterX="0.5" Angle="111"/>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                        <TranslateTransform Y="0.5"/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
                 <LinearGradientBrush.GradientStops>
-                    <GradientStop Offset="0.05" Color="#FFFFFF" />
-                    <GradientStop Offset="1" Color="#D3E3FF" />
+                    <GradientStop Color="#FFFFFF" Offset="0"/>
+                    <GradientStop Color="#F2F6FC" Offset="0.1658"/>
+                    <GradientStop Color="#F1F5FC" Offset="0.1659"/>
+                    <GradientStop Color="#F2F6FC" Offset="0.1902"/>
+                    <GradientStop Color="#F2F6FC" Offset="0.1903"/>
+                    <GradientStop Color="#F0F5FC" Offset="0.1904"/>
+                    <GradientStop Color="#EEF4FC" Offset="0.2099"/>
+                    <GradientStop Color="#EEF4FC" Offset="0.21"/>
+                    <GradientStop Color="#ECF2FB" Offset="0.2295"/>
+                    <GradientStop Color="#EBF1FB" Offset="0.2296"/>
+                    <GradientStop Color="#D7E7F8" Offset="1"/>
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
         </Border.Background>
@@ -199,7 +215,7 @@
                             
                             
                             Visibility="Visible"
-                            Width="220" Height="50" Text="{Binding Path=MainWindowInputText, Mode=TwoWay}">
+                            Width="220" Height="50" Text="{Binding Path=MenuOperatorsViewModel.MainWindowInputText, Mode=TwoWay}">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="BorderThickness" Value="0" />
@@ -294,9 +310,10 @@
                 <Popup Name="jarvisMenuPopup" Placement="Absolute"
                        VerticalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.Y}"
                        HorizontalOffset="{Binding PopupDictionaryService.MenuOperationsPosition.X}"
-                       AllowsTransparency="True" 
+                       AllowsTransparency="True"
+                       Focusable="True" ForceCursor="True" StaysOpen="True"
                        IsOpen="{Binding PopupDictionaryService.IsShowMenuOperations}"
-                       Width="400" Height="165" Margin="99,0,99,57" Grid.RowSpan="3">
+                       Width="420" Height="Auto" Margin="99,0,99,57" Grid.RowSpan="3">
                     <menuOperation:MenuOperatorsView/>
                 </Popup>
                 

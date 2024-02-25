@@ -60,38 +60,38 @@ public class UIElementDetector
     public void SubscribeToElementFocusChanged()
     {
         Automation.AddAutomationFocusChangedEventHandler(_focusChangedEventHandler);
-        Thread tuningJarivsPositionThread = new Thread(TunningPositionThread);
+        /*Thread tuningJarivsPositionThread = new Thread(TunningPositionThread);
         tuningJarivsPositionThread.Name = "Jarvis Position Tuning";
-        tuningJarivsPositionThread.Start();
+        tuningJarivsPositionThread.Start();*/
     }
 
-    private void TunningPositionThread(object? obj)
-    {
-        if (_popupDictionaryService != null)
-        {
-            try
-            {
-                while (true)
-                {
-                    if (_focusingElement != null && IsUseAutoTuningPosition)
-                    {
-                        _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
-                        _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
-                    }
-                    Thread.Sleep(33);
-                }
-            }
-            catch (ElementNotAvailableException)
-            {
-            }
-            catch (NullReferenceException)
-            {
-            }
-            catch (Exception)
-            {
-            }
-        }
-    }
+    //private void TunningPositionThread(object? obj)
+    //{
+    //    if (_popupDictionaryService != null)
+    //    {
+    //        try
+    //        {
+    //            while (true)
+    //            {
+    //                if (_focusingElement != null && IsUseAutoTuningPosition)
+    //                {
+    //                    _popupDictionaryService.UpdateJarvisActionPosition(CalculateElementLocation());
+    //                    _popupDictionaryService.UpdateMenuOperationsPosition(CalculateElementLocation());
+    //                }
+    //                Thread.Sleep(33);
+    //            }
+    //        }
+    //        catch (ElementNotAvailableException)
+    //        {
+    //        }
+    //        catch (NullReferenceException)
+    //        {
+    //        }
+    //        catch (Exception)
+    //        {
+    //        }
+    //    }
+    //}
 
     public void UnSubscribeToElementFocusChanged()
     {
@@ -107,8 +107,6 @@ public class UIElementDetector
                 return true;
             else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Custom"))
                 return true;
-            /*else if (automationElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Document"))
-                return true;*/
         }
         return false;
     }
@@ -122,11 +120,18 @@ public class UIElementDetector
     {
         AutomationElement? newFocusElement = sender as AutomationElement;
 
-        if (newFocusElement != null && newFocusElement != _focusingElement/* && e.ObjectId >= 0*/)
+        if (newFocusElement != null && newFocusElement != _focusingElement)
         {
+            if (newFocusElement.Current.AutomationId.Equals("Jarvis_Custom_Action_TextBox") ||
+                newFocusElement.Current.ControlType.ProgrammaticName.Equals("ControlType.Window") ||
+                newFocusElement.Current.ClassName.Equals(String.Empty))
+                return;
+
             if (IsEditableElement(newFocusElement))
             {
                 _focusingElement = newFocusElement;
+                // Publish Jarvis Action Position to EventAggregator
+                EventAggregator.PublishJarvisActionPositionChanged(_focusingElement.Current.AutomationId, EventArgs.Empty);
 
                 _popupDictionaryService.ShowJarvisAction(true);
                 _popupDictionaryService.ShowMenuOperations(false);

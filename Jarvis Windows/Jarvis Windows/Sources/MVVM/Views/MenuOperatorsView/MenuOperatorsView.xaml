@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:emoji="clr-namespace:Emoji.Wpf;assembly=Emoji.Wpf"
+             xmlns:local="clr-namespace:Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView" 
              mc:Ignorable="d" 
-             d:DesignHeight="165" d:DesignWidth="400">
+             Height="Auto" Width="420">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,52 +16,60 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border CornerRadius="20" BorderBrush="White" BorderThickness="2">
+    <Border CornerRadius="20" BorderBrush="White" BorderThickness="1.5" Padding="10.4">
         <Border.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <LinearGradientBrush MappingMode="RelativeToBoundingBox" 
+                     StartPoint="0,1" EndPoint="0,0">
+                <LinearGradientBrush.RelativeTransform>
+                    <TransformGroup>
+                        <RotateTransform CenterY="0.5" CenterX="0.5" Angle="86"/>
+                        <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="1.5" ScaleY="1.5"/>
+                        <TranslateTransform Y="0.5"/>
+                    </TransformGroup>
+                </LinearGradientBrush.RelativeTransform>
                 <LinearGradientBrush.GradientStops>
-
-                    <GradientStop Offset="0.34" Color="#E6EEFA" />
-                    <GradientStop Offset="1" Color="#D3E3F9" />
-
-
+                    <GradientStopCollection>
+                        <GradientStop Color="#FFF" Offset="0.1222"/>
+                        <GradientStop Color="#E6EEFA" Offset="0.2964"/>
+                        <GradientStop Color="#E6EEFA" Offset="0.5804"/>
+                        <GradientStop Color="#D3E3F9" Offset="0.9623"/>
+                    </GradientStopCollection>
                 </LinearGradientBrush.GradientStops>
             </LinearGradientBrush>
         </Border.Background>
 
+
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="12"/>
-                <RowDefinition Height="37"/>
+                <RowDefinition Height="32"/>
                 <RowDefinition Height="16"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="0"/>
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row ="1" Width="376" Height="37" Margin="12 0 12 0">
+            <Grid Grid.Row ="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="78"/>
-                    <ColumnDefinition Width="9"/>
-                    <ColumnDefinition Width="43"/>
-                    <ColumnDefinition Width="201"/>
-                    <ColumnDefinition Width="42"/>
+                    <ColumnDefinition Width="8"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="81"/>
+                    <ColumnDefinition Width="185.242"/>
                 </Grid.ColumnDefinitions>
 
 
-                <Grid Grid.Column="0" Width="78" Height="37" >
+                <Grid Grid.Column="0">
                     <Image 
                         Source="../../../../Assets/Images/jarvis_logo.png" 
-                        Margin="0,7.5,0,7.5"
+                        Margin="0 0 8 0"
                         Width="22" Height="22"
                         HorizontalAlignment="Left"/>
 
                     <TextBlock 
-                        Margin="30,6.5,0,6.5"
-                        Width="48"
-                        Height="24"
-                        Padding="3,3,3,3"
-            
+                        Margin="30 0 0 0"
+                        VerticalAlignment="Center"
                         FontSize="16"
-                        FontFamily="Ag"
+                        FontFamily="sans-serif"
                         FontWeight="Bold"
                         Foreground="#1450A3">Jarvis
                     </TextBlock>
@@ -67,162 +77,252 @@
                 </Grid>
 
                 <!-- Frame 21 -->
-                <Grid Grid.Column="2" Width="43" Height="20">
-                    <Border Background="White" Width="43" Height="20" CornerRadius="12" Padding="8 2 8 2">
+                <Grid Grid.Column="2">
+                    <Border Background="White" Width="40" Height="20" CornerRadius="12" Padding="8 2 8 2">
                         <TextBlock 
-                            HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                
-                            FontSize="12"
-                            FontFamily="Inter"
+                            FontSize="12" FontFamily="sans-serif"
                             FontWeight="Medium"
                             Foreground="#9CA3AF">Beta</TextBlock>
                     </Border>
                 </Grid>
 
-                <Grid Grid.Column="4" Width="37" Height="37">
+                <Grid Grid.Column="4">
 
-                    <Border Background="#BCD5F3" Width="37" Height="37" CornerRadius="10">
-                        <!--<Button
-                            
-                            x:Name="btnCloseIntroduction"
-                            Width="37"
-                            Height="37"
-                            
-                            Background="Transparent"
-                            BorderThickness="0"
-                            
-                            Command="{Binding HideMenuOperationsCommand}"
-                            >
-                            <Button.Content>
-
-                                <Image Source="../../../../Assets/Images/close.png"/>
-                            </Button.Content>
-                        </Button>-->
-                        <Button x:Name="btnCloseIntroduction"
-                                Width="37"
-                                Height="37"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Command="{Binding HideMenuOperationsCommand}">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="Button">
-                                                <Border Background="{TemplateBinding Background}"
-                                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}">
-                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="Transparent" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                            <Button.Content>
-                                <Image Source="../../../../Assets/Images/close.png" />
-                            </Button.Content>
-                        </Button>
-                    </Border>
-                </Grid>
-
-            </Grid>
-
-            <Grid Grid.Row ="3" Width="376" Height="88" Margin="12 3 12 3">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="36"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="36"/>
-                </Grid.RowDefinitions>
-
-                <Grid Grid.Row="0" Width="376" Height="36">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="210"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="121"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="17"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0">
-                        <Border 
-                           BorderThickness="0" CornerRadius="10" Background="#FFFFFF" 
-                             HorizontalAlignment="Left">
+                        <Button Style="{StaticResource MenuUndoRedoButton}"
+                                Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center">
 
+                            <Button.Content>
+                                <Path Data="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                                     Fill="#9CA3AF" Height="10" Stretch="Fill" Width="13"/>
 
-                            <Button Width="210" Height="36"     
-                                Style="{StaticResource JarvisOperationButton}"
-                                Command="{Binding TranslateCommand}">
-                                <StackPanel Orientation="Horizontal" Width="190" Margin="13 5 13 5">
-                                    <Image Margin="0 0 10 0" Source="../../../../Assets/Images/translate_img.png" Width="20" Height="20" VerticalAlignment="Center"/>
-
-                                    <TextBlock Text="Translate to " FontSize="14" Foreground="#082041" VerticalAlignment="Center"/>
-
-                                    <ComboBox Width="79" SelectionChanged="languageComboBox_SelectionChanged" Style="{StaticResource JarvisComboBox}" Name="languageComboBox" ItemsSource="{Binding Languages}" DisplayMemberPath="Value">
-                                    </ComboBox>
-                                </StackPanel>
-                            </Button>
-
-
-                        </Border>
-
+                            </Button.Content>
+                        </Button>
                     </Grid>
 
                     <Grid Grid.Column="2">
-                        <Border Height="36" CornerRadius="10" BorderBrush="#EEEEEE" BorderThickness="0"
-                                Background="#FFFFFF">
+                        <Button Style="{StaticResource MenuUndoRedoButton}"
+                                Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center">
 
-                            <Button Width="121" Height="36" 
-                                Style="{StaticResource JarvisOperationButton}"
-                                Command="{Binding ReviseCommand}">
-                                <StackPanel Orientation="Horizontal" Margin="13 5 13 5">
-                                    <Image Margin="0 0 10 0" Source="../../../../Assets/Images/pencil.png" Width="18" Height="18"/>
+                            <Button.Content>
+                                <Path Data="M5.921 11.9 1.353 8.62a.72.72 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                                     Fill="#9CA3AF" Height="10" Stretch="Fill" Width="13" FlowDirection="RightToLeft"/>
 
-                                    <TextBlock Text="Revise it" FontSize="14" Foreground="#082041" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Border>
-
+                            </Button.Content>
+                        </Button>
                     </Grid>
 
-                </Grid>
+                    <Grid Grid.Column="4">
+                        <Button 
+                            Padding="8 0 8 0"
+                            Style="{StaticResource MenuTopButton}"
+                            Width="56.242" Height="30">
+                            <Button.Content>
+                                <emoji:TextBlock Text="{Binding MenuOperatorsViewModel.RemainingAPIUsage}" 
+                                                 FontFamily="sans-serif" FontSize="16" 
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="118"/>
-                        <ColumnDefinition Width="258"/>
-
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-
-                        <Border Width="118" Height="36" CornerRadius="10" BorderBrush="#EEEEEE" BorderThickness="0" Background="#FFFFFF">
-                            <Button Width="118" Height="36" 
-                                Style="{StaticResource JarvisOperationButton}"
-                                Command="{Binding ShortenCommand}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image Margin="0 0 10 0" Source="../../../../Assets/Images/scissors.png" Width="20" Height="20" VerticalAlignment="Center"/>
-
-                                    <TextBlock Text="Shorten it" FontSize="14" Foreground="#082041" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Border>
+                            </Button.Content>
+                        </Button>
                     </Grid>
+                    <Grid Grid.Column="5">
+                        <Rectangle Height="24" Width="1" Fill="Blue" Opacity="0.1"/>
+                    </Grid>
+                    <Grid Grid.Column="6">
+                        <Button x:Name="btnCloseIntroduction"
+                                    BorderThickness="0.25"
+                               
+                                    Style="{StaticResource MenuTopButton}"
+                                    Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Command="{Binding MenuOperatorsViewModel.HideMenuOperationsCommand}">
+                            <Button.Content>
+                                <Image Source="../../../../Assets/Images/cross.png" 
+                                        Width="14" Height="14" />
+                            </Button.Content>
 
-
-
+                        </Button>
+                    </Grid>
                 </Grid>
             </Grid>
 
+            <ScrollViewer Grid.Row="2" Height="{Binding MenuOperatorsViewModel.ScrollBarHeight}" Margin="0 3 0 3"
+                          VerticalScrollBarVisibility="Hidden" Width="400">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <Border Margin="{Binding MenuOperatorsViewModel.FixedButtons[0].Margin}" Width ="Auto" Height="Auto">
+                                <Button Style="{StaticResource JarvisOperationButton}"
+                                        Command="{Binding MenuOperatorsViewModel.FixedButtons[0].Command}" CommandParameter="Translate it"
+                                        Visibility="{Binding MenuOperatorsViewModel.FixedButtons[0].Visibility, Converter={StaticResource VisibilityConverter}}"
+                                        Width ="221" Height="38">
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <emoji:TextBlock Text="🌐" FontFamily="sans-serif" 
+                                                 FontSize="18" Width= "21" Height="28" HorizontalAlignment="Center" 
+                                                 VerticalAlignment="Top" Margin="0 0 10 0"/>
+
+                                        <TextBlock Text="Translate to " FontFamily ="sans-serif" 
+                                                   FontSize="14" Foreground="#082041" VerticalAlignment="Center"/>
+
+                                        <ComboBox Width="79"
+                                                  FontFamily ="sans-serif" Style="{StaticResource JarvisComboBox}" 
+                                                  Name="languageComboBox" ItemsSource="{Binding MenuOperatorsViewModel.MenuLanguages}" 
+                                                  DisplayMemberPath="Value" SelectedIndex="{Binding MenuOperatorsViewModel.LanguageSelectedIndex}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding MenuOperatorsViewModel.LanguageComboBoxCommand}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Button>
+
+
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Column="1">
+                            <Border Margin="{Binding MenuOperatorsViewModel.FixedButtons[1].Margin}" Width="Auto" Height="Auto">
+                                <Button Style="{StaticResource JarvisOperationButton}"
+                                        Command="{Binding MenuOperatorsViewModel.FixedButtons[1].Command}" CommandParameter="Revise it"
+                                        Visibility="{Binding MenuOperatorsViewModel.FixedButtons[1].Visibility, Converter={StaticResource VisibilityConverter}}"
+                                        Width="107.484" Height="38">
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <emoji:TextBlock Text="✏️" FontFamily="sans-serif" 
+                                                         FontSize="18" Width="21" Height="28" HorizontalAlignment="Center" 
+                                                         VerticalAlignment="Top" Margin="0 0 10 0"/>
+
+                                        <TextBlock Text="Revise it" FontFamily ="sans-serif" 
+                                                    FontSize="14" Foreground="#082041" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Border>
+                        </Grid>
+
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ItemsControl ItemsSource="{Binding MenuOperatorsViewModel.DynamicButtons}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="{Binding Margin}" Width="Auto" Height="41">
+                                        <Button Width="{Binding Width}" Height="38"     
+                                                Style="{StaticResource JarvisOperationButton}"
+                                                Command="{Binding Command}" CommandParameter="{Binding CommandParameter}"
+                                                Visibility="{Binding Visibility, Converter={StaticResource VisibilityConverter}}">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <emoji:TextBlock Text="{Binding Icon}" FontFamily="sans-serif" 
+                                                         FontSize="18" Width="21" Height="28" HorizontalAlignment="Left" 
+                                                         VerticalAlignment="Center" Margin="0 0 8 0"/>
+                                                <TextBlock Text="{Binding Content}" FontFamily="sans-serif" FontSize="14" Foreground="#082041" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                            </StackPanel>
+                                        </Button>
+
+
+
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+
+                    </Grid>
+
+                </Grid>
+
+            </ScrollViewer>
+
+            <Grid Grid.Row="3">
+                <Border CornerRadius="16" Width="396" Background="#FFFFFF"
+                        BorderBrush="#e5e7eb" BorderThickness="1.5">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="332.812"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="0">
+                            <TextBox Height="32" Width="332.812" HorizontalAlignment="Left" VerticalAlignment="Center" BorderThickness="0"
+                                     FontFamily="sans-serif" FontSize="14" Padding="11.2 7.2 11.2 7.2"
+                                     PreviewMouseDown="Jarvis_Custom_Action_TextBox_PreviewMouseDown"
+                                     LostFocus="Jarvis_Custom_Action_TextBox_LostFocus"
+                                     x:Name="Jarvis_Custom_Action_TextBox" 
+       
+                                    Text="{Binding MenuOperatorsViewModel.FilterText, UpdateSourceTrigger=PropertyChanged}">
+                            </TextBox>
+
+                            <TextBlock Text="Ask Jarvis to..." Foreground="#FF104082" Opacity="0.7"
+                                       VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                       FontSize="14" FontFamily="inherit"
+                                       Margin="11.2 7.2 11.2 7.2" Padding="0" IsHitTestVisible="False">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding MenuOperatorsViewModel.IsTextEmpty}" Value="true">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding MenuOperatorsViewModel.IsTextEmpty}" Value="false">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Column="2">
+                            <Border CornerRadius="12" Width="32" Height="32" Style="{StaticResource AskButtonBorder}">
+                                <Button Width="32" Height="32"
+                                        Style="{StaticResource AskButton}"
+                                        Command="{Binding MenuOperatorsViewModel.AICommand}" CommandParameter="Ask">
+                                    <Button.Content>
+                                        
+                                        <Path Data="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.73 1.73 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.73 1.73 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.73 1.73 0 0 0 3.407 2.31zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center"
+                                              Fill="White" Height="18" Stretch="Fill" Width="13.5"/>
+                                    </Button.Content>
+                                </Button>
+                                
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
-
-
     </Border>
-
+    
 </UserControl>

@@ -57,7 +57,7 @@
                     <Image.Style>
                         <Style TargetType="Image">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSpinningJarvisIcon}" Value="True">
+                                <DataTrigger Binding="{Binding MenuOperatorsViewModel.IsSpinningJarvisIcon}" Value="True">
                                     <Setter Property="RenderTransform">
                                         <Setter.Value>
                                             <RotateTransform Angle="360"/>
@@ -67,7 +67,7 @@
                                         <BeginStoryboard Storyboard="{StaticResource SpinAnimation}" />
                                     </DataTrigger.EnterActions>
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding IsSpinning}" Value="False">
+                                <DataTrigger Binding="{Binding MenuOperatorsViewModel.IsSpinningJarvisIcon}" Value="False">
 
                                 </DataTrigger>
                             </Style.Triggers>
