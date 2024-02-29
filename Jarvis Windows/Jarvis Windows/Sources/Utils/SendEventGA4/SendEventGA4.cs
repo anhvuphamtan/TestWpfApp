@@ -13,7 +13,7 @@ public class SendEventGA4
 {
     private const int DEFAULT_ENGAGEMENT_TIME_IN_MSEC = 100;
     private const int SESSION_EXPIRATION_IN_MIN = 30;
-    private GA4LocalStorage GA4LocalStorage { get; set; } // Package mode only
+    // private GA4LocalStorage2 GA4LocalStorage { get; set; } // Package mode only
     
     private readonly HttpClient _httpClient;
     private readonly string _ga4Endpoint;
@@ -35,12 +35,12 @@ public class SendEventGA4
 
         try
         {
-            GA4LocalStorage = new GA4LocalStorage();
-            _clientID = GA4LocalStorage.ClientID;
-            _userID = GA4LocalStorage.UserID;
-            _sessionID = GA4LocalStorage.SessionID;
-            _sessionTimestamp = GA4LocalStorage.SessionTimestamp;
-            _version = GA4LocalStorage.AppVersion;
+            // GA4LocalStorage = new GA4LocalStorage2();
+            _clientID = WindowStorageService2.ReadLocalStorage("ClientID");
+            _userID = WindowStorageService2.ReadLocalStorage("UserID");
+            _sessionID = WindowStorageService2.ReadLocalStorage("SessionID");
+            _sessionTimestamp = long.Parse(WindowStorageService2.ReadLocalStorage("SessionTimestamp"));
+            _version = WindowStorageService2.ReadLocalStorage("Version");
 
         }
         catch
@@ -77,15 +77,15 @@ public class SendEventGA4
         if (!AppStatus.IsPackaged) return;
 
         string _recentVersion = "";
-        try { _recentVersion = GA4LocalStorage.GetAppVersion(); }
+        try { _recentVersion = WindowStorageService2.GetAppVersion(); }
         catch { return; }
         
         if (_version == "")     
             await SendEvent("windows_app_installed");
         else if (_version != _recentVersion)
             await SendEvent("windows_app_updated");
-        
-        GA4LocalStorage.WriteLocalStorage("AppVersion", _recentVersion);
+
+        WindowStorageService2.WriteLocalStorage("AppVersion", _recentVersion);
         _version = _recentVersion;
     }
 
@@ -93,12 +93,9 @@ public class SendEventGA4
     {
         if (AppStatus.IsPackaged)  // Package mode
         {
-            GA4LocalStorage.GetOrCreateSessionData();
-            _sessionID = GA4LocalStorage.SessionID;
-            _sessionTimestamp = GA4LocalStorage.SessionTimestamp;
-
-            GA4LocalStorage.WriteLocalStorage("SessionID", _sessionID);
-            GA4LocalStorage.WriteLocalStorage("SessionTimeStamp", _sessionTimestamp.ToString());
+            WindowStorageService2.GetOrCreateSessionData();
+            _sessionID = WindowStorageService2.ReadLocalStorage("SessionID");
+            _sessionTimestamp = long.Parse(WindowStorageService2.ReadLocalStorage("SessionTimestamp"));
         }
 
         else // Debug mode

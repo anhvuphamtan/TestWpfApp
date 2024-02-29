@@ -7,8 +7,9 @@ public static class AppStatus
 
     private static bool CheckIsPackaged()
     {
-        try { return Windows.Storage.ApplicationData.Current.LocalSettings != null; }
-        catch { return false; }
+        return true;
+        //try { return Windows.Storage.ApplicationData.Current.LocalSettings != null; }
+        //catch { return false; }
     }
 }
 

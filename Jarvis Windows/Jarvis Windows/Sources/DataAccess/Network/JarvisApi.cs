@@ -15,15 +15,15 @@ public sealed class JarvisApi
 
     private static HttpClient? _client;
     private static string? _apiUrl;
-    private APILocalStorage APILocalStorage { get; set; }
+    // private APILocalStorage2 APILocalStorage { get; set; }
 
     private JarvisApi()
     {
         _client = new HttpClient();
         _apiUrl = DataConfiguration.ApiUrl;
 
-        try { APILocalStorage = new APILocalStorage(); }
-        catch { }    
+        //try { APILocalStorage = new APILocalStorage2(); }
+        //catch { }    
     }
 
     public static JarvisApi Instance
@@ -42,8 +42,9 @@ public sealed class JarvisApi
     {
         if (AppStatus.IsPackaged)
         {
-            APILocalStorage.ApiUsageRemaining = value;
-            APILocalStorage.WriteLocalStorage("ApiUsageRemaining", value.ToString());
+            WindowStorageService2.WriteLocalStorage("ApiUsageRemaining", value.ToString());
+            //APILocalStorage.ApiUsageRemaining = value;
+            //APILocalStorage.WriteLocalStorage("ApiUsageRemaining", value.ToString());
         }
         else
             DataConfiguration.WriteValue("ApiUsageRemaining", value);
@@ -54,15 +55,15 @@ public sealed class JarvisApi
         string _apiHeaderID = "";
         if (AppStatus.IsPackaged)
         {
-            if (APILocalStorage.ApiUsageRemaining == 0)
+            if (WindowStorageService2.ReadLocalStorage("ApiUsageRemaining") == "0")
             {
-                APILocalStorage.ApiHeaderID = Guid.NewGuid().ToString();
-                APILocalStorage.ApiUsageRemaining = 10;
-                APILocalStorage.WriteLocalStorage("ApiHeaderID", APILocalStorage.ApiHeaderID);
-                APILocalStorage.WriteLocalStorage("ApiUsageRemaining", "10");
+                //APILocalStorage.ApiHeaderID = ;
+                //APILocalStorage.ApiUsageRemaining = 10;
+                WindowStorageService2.WriteLocalStorage("ApiHeaderID", Guid.NewGuid().ToString());
+                WindowStorageService2.WriteLocalStorage("ApiUsageRemaining", "10");
             }
 
-            _apiHeaderID = APILocalStorage.ApiHeaderID;
+            _apiHeaderID = WindowStorageService2.ReadLocalStorage("ApiHeaderID");
 
         }
         else
