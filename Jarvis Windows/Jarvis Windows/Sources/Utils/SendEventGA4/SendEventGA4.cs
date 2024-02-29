@@ -8,12 +8,12 @@ using Jarvis_Windows.Sources.DataAccess;
 using System.Text.Json;
 using System.Collections.Generic;
 using System.Windows;
+using Windows.ApplicationModel;
 
 public class SendEventGA4
 {
     private const int DEFAULT_ENGAGEMENT_TIME_IN_MSEC = 100;
     private const int SESSION_EXPIRATION_IN_MIN = 30;
-    // private GA4LocalStorage2 GA4LocalStorage { get; set; } // Package mode only
     
     private readonly HttpClient _httpClient;
     private readonly string _ga4Endpoint;
@@ -28,28 +28,15 @@ public class SendEventGA4
     
     public SendEventGA4()
     {
-        _httpClient = new HttpClient();
-        _ga4Endpoint = "https://www.google-analytics.com/mp/collect";
-        _measurementID = DataConfiguration.MeasurementID;
-        _apiSecret = DataConfiguration.ApiSecret;
-
-        try
-        {
-            // GA4LocalStorage = new GA4LocalStorage2();
-            _clientID = WindowStorageService2.ReadLocalStorage("ClientID");
-            _userID = WindowStorageService2.ReadLocalStorage("UserID");
-            _sessionID = WindowStorageService2.ReadLocalStorage("SessionID");
-            _sessionTimestamp = long.Parse(WindowStorageService2.ReadLocalStorage("SessionTimestamp"));
-            _version = WindowStorageService2.ReadLocalStorage("Version");
-
-        }
-        catch
-        {
-            _clientID = DataConfiguration.ClientID;
-            _userID = DataConfiguration.UserID;
-            _sessionID = DataConfiguration.SessionID;
-            _sessionTimestamp = long.Parse(DataConfiguration.SessionTimestamp);
-        }
+        _httpClient         = new HttpClient();
+        _ga4Endpoint        = "https://www.google-analytics.com/mp/collect";
+        _measurementID      = DataConfiguration.MeasurementID;
+        _apiSecret          = DataConfiguration.ApiSecret;
+        _clientID           = WindowStorageService3.ReadLocalStorage("ClientID");
+        _userID             = WindowStorageService3.ReadLocalStorage("UserID");
+        _sessionID          = WindowStorageService3.ReadLocalStorage("SessionID");
+        _sessionTimestamp   = long.Parse(WindowStorageService3.ReadLocalStorage("SessionTimestamp"));
+        _version            = WindowStorageService3.ReadLocalStorage("AppVersion");
     }
 
     public async Task SendEvent(string eventName, Dictionary<string, object> eventParams = null)
@@ -77,51 +64,21 @@ public class SendEventGA4
         if (!AppStatus.IsPackaged) return;
 
         string _recentVersion = "";
-        try { _recentVersion = WindowStorageService2.GetAppVersion(); }
-        catch { return; }
-        
-        if (_version == "")     
-            await SendEvent("windows_app_installed");
-        else if (_version != _recentVersion)
-            await SendEvent("windows_app_updated");
 
-        WindowStorageService2.WriteLocalStorage("AppVersion", _recentVersion);
+        Package package = Package.Current;
+        PackageVersion version = package.Id.Version;
+        _recentVersion = $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+        
+        if (_version == "")  await SendEvent("windows_app_installed");
+        else if (_version != _recentVersion) await SendEvent("windows_app_updated");
+
+        WindowStorageService3.WriteLocalStorage("AppVersion", _recentVersion);
         _version = _recentVersion;
     }
 
     private JObject CreateEventPayload(string eventName, Dictionary<string, object> eventParams)
     {
-        if (AppStatus.IsPackaged)  // Package mode
-        {
-            WindowStorageService2.GetOrCreateSessionData();
-            _sessionID = WindowStorageService2.ReadLocalStorage("SessionID");
-            _sessionTimestamp = long.Parse(WindowStorageService2.ReadLocalStorage("SessionTimestamp"));
-        }
-
-        else // Debug mode
-        {
-            long _currentTimeInMs = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
-            if (string.IsNullOrEmpty(_sessionID))
-            {
-                _sessionID = _currentTimeInMs.ToString();
-                _sessionTimestamp = _currentTimeInMs;
-            }
-
-            else if (!string.IsNullOrEmpty(_sessionID) && _sessionTimestamp != 0)
-            {
-                long _durationInMin = (_currentTimeInMs - _sessionTimestamp) / 60000;
-                if (_durationInMin > SESSION_EXPIRATION_IN_MIN)
-                {
-                    _sessionID = "";
-                    _sessionTimestamp = 0;
-                }
-                else _sessionTimestamp = _currentTimeInMs;
-            }
-            
-            DataConfiguration.WriteValue("SessionID", _sessionID);
-            DataConfiguration.WriteValue("SessionTimestamp", _sessionTimestamp);
-        }
-
+        GetOrCreateSessionData();
         var payload = JObject.FromObject(new
         {
             client_id = _clientID,
@@ -152,5 +109,30 @@ public class SendEventGA4
         }
 
         return payload;
+    }
+
+    private void GetOrCreateSessionData()
+    {
+        long _currentTimeInMs = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
+        
+        if (string.IsNullOrEmpty(_sessionID))
+        {
+            _sessionID = _currentTimeInMs.ToString();
+            _sessionTimestamp = _currentTimeInMs;
+        }
+
+        else if (!string.IsNullOrEmpty(_sessionID) && _sessionTimestamp != 0)
+        {
+            long _durationInMin = (_currentTimeInMs - _sessionTimestamp) / 60000;
+            if (_durationInMin > SESSION_EXPIRATION_IN_MIN)
+            {
+                _sessionID = "";
+                _sessionTimestamp = 0;
+            }
+            else _sessionTimestamp = _currentTimeInMs;
+        }
+
+        WindowStorageService3.WriteLocalStorage("SessionID", _sessionID);
+        WindowStorageService3.WriteLocalStorage("SessionTimeStamp", _sessionTimestamp.ToString());
     }
 }

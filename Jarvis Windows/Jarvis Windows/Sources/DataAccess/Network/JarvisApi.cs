@@ -15,15 +15,11 @@ public sealed class JarvisApi
 
     private static HttpClient? _client;
     private static string? _apiUrl;
-    // private APILocalStorage2 APILocalStorage { get; set; }
 
     private JarvisApi()
     {
         _client = new HttpClient();
         _apiUrl = DataConfiguration.ApiUrl;
-
-        //try { APILocalStorage = new APILocalStorage2(); }
-        //catch { }    
     }
 
     public static JarvisApi Instance
@@ -40,40 +36,19 @@ public sealed class JarvisApi
 
     public void StoreUsageRemaining(int value)
     {
-        if (AppStatus.IsPackaged)
-        {
-            WindowStorageService2.WriteLocalStorage("ApiUsageRemaining", value.ToString());
-            //APILocalStorage.ApiUsageRemaining = value;
-            //APILocalStorage.WriteLocalStorage("ApiUsageRemaining", value.ToString());
-        }
-        else
-            DataConfiguration.WriteValue("ApiUsageRemaining", value);
+        WindowStorageService3.WriteLocalStorage("ApiUsageRemaining", value.ToString());
     }
 
     public async Task<string?> ApiHandler(string requestBody, string endPoint)
     {
-        string _apiHeaderID = "";
-        if (AppStatus.IsPackaged)
+        string _apiHeaderID = "";      
+        if (WindowStorageService3.ReadLocalStorage("ApiUsageRemaining") == "0")
         {
-            if (WindowStorageService2.ReadLocalStorage("ApiUsageRemaining") == "0")
-            {
-                //APILocalStorage.ApiHeaderID = ;
-                //APILocalStorage.ApiUsageRemaining = 10;
-                WindowStorageService2.WriteLocalStorage("ApiHeaderID", Guid.NewGuid().ToString());
-                WindowStorageService2.WriteLocalStorage("ApiUsageRemaining", "10");
-            }
-
-            _apiHeaderID = WindowStorageService2.ReadLocalStorage("ApiHeaderID");
-
+            WindowStorageService3.WriteLocalStorage("ApiHeaderID", Guid.NewGuid().ToString());
+            WindowStorageService3.WriteLocalStorage("ApiUsageRemaining", "10");
         }
-        else
-        {
-            _apiHeaderID = (DataConfiguration.ApiHeaderID == "" || DataConfiguration.ApiUsageRemaining == 0) 
-                            ? Guid.NewGuid().ToString() : DataConfiguration.ApiHeaderID;
 
-            DataConfiguration.WriteValue("ApiHeaderID", _apiHeaderID);
-            DataConfiguration.WriteValue("ApiUsageRemaining", 10);
-        }
+        _apiHeaderID = WindowStorageService3.ReadLocalStorage("ApiHeaderID");     
         
         var contentData = new StringContent(requestBody, Encoding.UTF8, "application/json");
         try

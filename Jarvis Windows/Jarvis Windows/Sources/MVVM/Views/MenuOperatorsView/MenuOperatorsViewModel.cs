@@ -5,15 +5,12 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Jarvis_Windows.Sources.DataAccess;
 using Jarvis_Windows.Sources.Utils.Core;
 using Jarvis_Windows.Sources.MVVM.Models;
 using Jarvis_Windows.Sources.Utils.Services;
 using Jarvis_Windows.Sources.Utils.Constants;
 using Jarvis_Windows.Sources.DataAccess.Network;
 using Jarvis_Windows.Sources.Utils.Accessibility;
-using Hanssens.Net;
-
 
 namespace Jarvis_Windows.Sources.MVVM.Views.MenuOperatorsView;
 
@@ -178,15 +175,9 @@ public class MenuOperatorsViewModel : ViewModelBase
         PopupDictionaryService = popupDictionaryService;
         UIElementDetector = uIElementDetector;
         SendEventGA4 = sendEventGA4;
-        //RemainingAPIUsage = (AppStatus.IsPackaged)
-        //                        ? $"{Windows.Storage.ApplicationData.Current.LocalSettings.Values["ApiUsageRemaining"]} 🔥"
-        //                        : $"{DataConfiguration.ApiUsageRemaining} 🔥";
-
-        RemainingAPIUsage = $"{WindowStorageService2.ReadLocalStorage("ApiUsageRemaining")} 🔥";
-
+        RemainingAPIUsage = $"{WindowStorageService3.ReadLocalStorage("ApiUsageRemaining")} 🔥";
 
         HideMenuOperationsCommand = new RelayCommand(o => { PopupDictionaryService.ShowMenuOperations(false); }, o => true);
-
         AICommand = new RelayCommand(ExecuteAICommand, o => true);
         ExpandCommand = new RelayCommand(ExecuteExpandCommand, o => true);
         LanguageComboBoxCommand = new RelayCommand(OnLanguageSelectionChanged, o => true);
@@ -287,11 +278,7 @@ public class MenuOperatorsViewModel : ViewModelBase
                 return;
             }
 
-            //RemainingAPIUsage = (AppStatus.IsPackaged)
-            //                    ? $"{curLocalStorage2.ReadLocalStorage("ApiUsageRemaining")} 🔥"
-            //                    : $"{DataConfiguration.ApiUsageRemaining} 🔥";
-
-            RemainingAPIUsage = $"{WindowStorageService2.ReadLocalStorage("ApiUsageRemaining")} 🔥";
+            RemainingAPIUsage = $"{WindowStorageService3.ReadLocalStorage("ApiUsageRemaining")} 🔥";
 
             if (_isMainWindowFocus != true) { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
             else { MainWindowInputText = textFromAPI; }
