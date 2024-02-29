@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Windows.Storage;
 using Hanssens.Net;
+using System.IO;
 using System;
 
 public static class AppStatus
@@ -15,36 +16,28 @@ public static class AppStatus
 
 public static class WindowLocalStorage
 {
-    private static bool _isPackaged = AppStatus.IsPackaged;
-    private static ApplicationDataContainer LocalStoragePackage
+    private static LocalStorage? _localStorage;
+    private static LocalStorage LocalStorage
     {
         get
         {
-            if (_isPackaged) return ApplicationData.Current.LocalSettings;
-            return null;
-        }
-    }
-
-    private static LocalStorage? _localStorageUnpackage;
-    private static LocalStorage LocalStorageUnpackage
-    {
-        get
-        {
-            if (_isPackaged) return null;
-
-            if (_localStorageUnpackage == null)
+            string _fileName = $"{AppDomain.CurrentDomain.BaseDirectory}\\AppSettings\\LocalStorageFile.localstorage";
+            if (File.Exists(_fileName))
+                File.SetAttributes(_fileName, System.IO.FileAttributes.Normal);
+            
+            if (_localStorage == null)
             {
                 var config = new LocalStorageConfiguration()
                 {
-                    Filename = $"{AppDomain.CurrentDomain.BaseDirectory}\\AppSettings\\LocalStorageUnpackage.localstorage",
+                    Filename = _fileName,
                     AutoLoad = true,
                     AutoSave = true
                 };
 
-                _localStorageUnpackage = new LocalStorage(config);
+                _localStorage = new LocalStorage(config);
             }
 
-            return _localStorageUnpackage;
+            return _localStorage;
         }
     }
 
@@ -55,31 +48,26 @@ public static class WindowLocalStorage
         { "SessionID", "" },
         { "SessionTimestamp", "0" },
         { "AppVersion", "" },
-        { "ApiHeaderID", "" },
-        { "ApiUsageRemaining", "0" }
+        { "ApiHeaderID", Guid.NewGuid().ToString() },
+        { "ApiUsageRemaining", "10" }
     };
 
     public static void InitValue(string key)
     {
-        if ( (_isPackaged && !LocalStoragePackage.Values.ContainsKey(key))
-            || (!_isPackaged && !LocalStorageUnpackage.Exists(key)) ) 
+        if (!LocalStorage.Exists(key)) 
             WriteLocalStorage(key, DefaultValue[key]);
     }
 
     public static string ReadLocalStorage(string key)
     {
         InitValue(key);
-        if (_isPackaged) return LocalStoragePackage.Values[key].ToString();
-        return LocalStorageUnpackage.Get<string>(key);
+        return LocalStorage.Get<string>(key);
     }
 
     public static void WriteLocalStorage(string key, string value)
     {
-        if (_isPackaged) LocalStoragePackage.Values[key] = value;
-        else
-        {
-            LocalStorageUnpackage.Store(key, value);
-            LocalStorageUnpackage.Persist();
-        }
+        LocalStorage.Store(key, value);
+        LocalStorage.Persist();
+        
     }
 }
