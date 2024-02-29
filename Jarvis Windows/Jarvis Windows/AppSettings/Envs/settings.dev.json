@@ -1,11 +1,5 @@
 {
   "ApiUrl": "https://api.dev.jarvis.cx",
   "MeasurementID": "G-6ZBC81J0EL",
-  "ApiSecret": "3CJXJQ7LSqypPNeMJCt7oA",
-  "ClientID": "",
-  "UserID": "",
-  "ApiHeaderID": "",
-  "ApiUsageRemaining": 0,
-  "SessionID": "",
-  "SessionTimestamp": "0"
+  "ApiSecret": "3CJXJQ7LSqypPNeMJCt7oA"
 }

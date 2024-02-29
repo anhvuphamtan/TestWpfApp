@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Net.Http;
+﻿using System;
 using System.Text;
+using Newtonsoft.Json;
+using System.Net.Http;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace Jarvis_Windows.Sources.DataAccess.Network;
 
@@ -15,7 +13,7 @@ public sealed class JarvisApi
 
     private static HttpClient? _client;
     private static string? _apiUrl;
-
+    private static string? _apiHeaderID;
     private JarvisApi()
     {
         _client = new HttpClient();
@@ -34,21 +32,15 @@ public sealed class JarvisApi
         }
     }
 
-    public void StoreUsageRemaining(int value)
-    {
-        WindowStorageService3.WriteLocalStorage("ApiUsageRemaining", value.ToString());
-    }
-
     public async Task<string?> ApiHandler(string requestBody, string endPoint)
-    {
-        string _apiHeaderID = "";      
-        if (WindowStorageService3.ReadLocalStorage("ApiUsageRemaining") == "0")
+    {           
+        if (WindowLocalStorage.ReadLocalStorage("ApiUsageRemaining") == "0")
         {
-            WindowStorageService3.WriteLocalStorage("ApiHeaderID", Guid.NewGuid().ToString());
-            WindowStorageService3.WriteLocalStorage("ApiUsageRemaining", "10");
+            WindowLocalStorage.WriteLocalStorage("ApiHeaderID", Guid.NewGuid().ToString());
+            WindowLocalStorage.WriteLocalStorage("ApiUsageRemaining", "10");
         }
 
-        _apiHeaderID = WindowStorageService3.ReadLocalStorage("ApiHeaderID");     
+        _apiHeaderID = WindowLocalStorage.ReadLocalStorage("ApiHeaderID");     
         
         var contentData = new StringContent(requestBody, Encoding.UTF8, "application/json");
         try
@@ -64,7 +56,7 @@ public sealed class JarvisApi
                 dynamic responseObject = JsonConvert.DeserializeObject(responseContent);
 
                 int remainingUsage = responseObject.remainingUsage;
-                StoreUsageRemaining(remainingUsage);
+                WindowLocalStorage.WriteLocalStorage("ApiUsageRemaining", remainingUsage.ToString());
 
                 string finalMessage = responseObject.message;
                 return finalMessage;
@@ -78,9 +70,7 @@ public sealed class JarvisApi
         }
     }
 
-
     // ---------------------------------- Non custom AI Actions ---------------------------------- //
-
     public async Task<string?> TranslateHandler(String content, String lang)
     {
         var requestBody = JsonConvert.SerializeObject(new

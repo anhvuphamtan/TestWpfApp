@@ -1,14 +1,11 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
-using Jarvis_Windows.Sources.DataAccess;
-using System.Text.Json;
-using System.Collections.Generic;
-using System.Windows;
 using Windows.ApplicationModel;
+using System.Collections.Generic;
+using Jarvis_Windows.Sources.DataAccess;
 
 public class SendEventGA4
 {
@@ -25,18 +22,17 @@ public class SendEventGA4
     private long _sessionTimestamp;
     private string _version; // App version, only available in package mode
 
-    
     public SendEventGA4()
     {
         _httpClient         = new HttpClient();
         _ga4Endpoint        = "https://www.google-analytics.com/mp/collect";
         _measurementID      = DataConfiguration.MeasurementID;
         _apiSecret          = DataConfiguration.ApiSecret;
-        _clientID           = WindowStorageService3.ReadLocalStorage("ClientID");
-        _userID             = WindowStorageService3.ReadLocalStorage("UserID");
-        _sessionID          = WindowStorageService3.ReadLocalStorage("SessionID");
-        _sessionTimestamp   = long.Parse(WindowStorageService3.ReadLocalStorage("SessionTimestamp"));
-        _version            = WindowStorageService3.ReadLocalStorage("AppVersion");
+        _clientID           = WindowLocalStorage.ReadLocalStorage("ClientID");
+        _userID             = WindowLocalStorage.ReadLocalStorage("UserID");
+        _sessionID          = WindowLocalStorage.ReadLocalStorage("SessionID");
+        _sessionTimestamp   = long.Parse(WindowLocalStorage.ReadLocalStorage("SessionTimestamp"));
+        _version            = WindowLocalStorage.ReadLocalStorage("AppVersion");
     }
 
     public async Task SendEvent(string eventName, Dictionary<string, object> eventParams = null)
@@ -72,7 +68,7 @@ public class SendEventGA4
         if (_version == "")  await SendEvent("windows_app_installed");
         else if (_version != _recentVersion) await SendEvent("windows_app_updated");
 
-        WindowStorageService3.WriteLocalStorage("AppVersion", _recentVersion);
+        WindowLocalStorage.WriteLocalStorage("AppVersion", _recentVersion);
         _version = _recentVersion;
     }
 
@@ -132,7 +128,7 @@ public class SendEventGA4
             else _sessionTimestamp = _currentTimeInMs;
         }
 
-        WindowStorageService3.WriteLocalStorage("SessionID", _sessionID);
-        WindowStorageService3.WriteLocalStorage("SessionTimeStamp", _sessionTimestamp.ToString());
+        WindowLocalStorage.WriteLocalStorage("SessionID", _sessionID);
+        WindowLocalStorage.WriteLocalStorage("SessionTimeStamp", _sessionTimestamp.ToString());
     }
 }

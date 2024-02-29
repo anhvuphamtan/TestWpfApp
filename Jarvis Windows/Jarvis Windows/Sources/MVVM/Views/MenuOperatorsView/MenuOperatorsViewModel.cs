@@ -23,7 +23,6 @@ public class MenuOperatorsViewModel : ViewModelBase
     private ObservableCollection<MenuButton> _fixedButtons;
     private ObservableCollection<MenuButton> _dynamicButtons;
 
-
     private bool _isTextEmpty;
     private string _filterText;
     private double _scrollBarHeight;
@@ -32,7 +31,6 @@ public class MenuOperatorsViewModel : ViewModelBase
     private bool _isSpinningJarvisIcon;
     private int _languageSelectedIndex;
     private string _mainWindowInputText;
-
 
     public RelayCommand HideMenuOperationsCommand { get; set; }
     public List<Language> MenuLanguages { get; set; }
@@ -175,7 +173,7 @@ public class MenuOperatorsViewModel : ViewModelBase
         PopupDictionaryService = popupDictionaryService;
         UIElementDetector = uIElementDetector;
         SendEventGA4 = sendEventGA4;
-        RemainingAPIUsage = $"{WindowStorageService3.ReadLocalStorage("ApiUsageRemaining")} 🔥";
+        RemainingAPIUsage = $"{WindowLocalStorage.ReadLocalStorage("ApiUsageRemaining")} 🔥";
 
         HideMenuOperationsCommand = new RelayCommand(o => { PopupDictionaryService.ShowMenuOperations(false); }, o => true);
         AICommand = new RelayCommand(ExecuteAICommand, o => true);
@@ -278,7 +276,7 @@ public class MenuOperatorsViewModel : ViewModelBase
                 return;
             }
 
-            RemainingAPIUsage = $"{WindowStorageService3.ReadLocalStorage("ApiUsageRemaining")} 🔥";
+            RemainingAPIUsage = $"{WindowLocalStorage.ReadLocalStorage("ApiUsageRemaining")} 🔥";
 
             if (_isMainWindowFocus != true) { UIElementDetector.SetValueForFocusingEditElement(textFromAPI ?? ErrorConstant.translateError); }
             else { MainWindowInputText = textFromAPI; }

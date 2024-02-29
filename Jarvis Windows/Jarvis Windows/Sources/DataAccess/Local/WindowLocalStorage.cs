@@ -1,12 +1,11 @@
-﻿using Windows.Storage;
+﻿using System.Collections.Generic;
+using Windows.Storage;
 using Hanssens.Net;
 using System;
-using System.Collections.Generic;
 
 public static class AppStatus
 {
     public static bool IsPackaged => CheckIsPackaged();
-
     private static bool CheckIsPackaged()
     {
         try { return ApplicationData.Current.LocalSettings != null; }
@@ -14,7 +13,7 @@ public static class AppStatus
     }
 }
 
-public static class WindowStorageService3
+public static class WindowLocalStorage
 {
     private static bool _isPackaged = AppStatus.IsPackaged;
     private static ApplicationDataContainer LocalStoragePackage
@@ -37,7 +36,7 @@ public static class WindowStorageService3
             {
                 var config = new LocalStorageConfiguration()
                 {
-                    Filename = $"{AppDomain.CurrentDomain.BaseDirectory}\\AppSettings\\LocalStorage.localstorage",
+                    Filename = $"{AppDomain.CurrentDomain.BaseDirectory}\\AppSettings\\LocalStorageUnpackage.localstorage",
                     AutoLoad = true,
                     AutoSave = true
                 };
@@ -62,7 +61,7 @@ public static class WindowStorageService3
 
     public static void InitValue(string key)
     {
-        if ( (_isPackaged && LocalStoragePackage.Values.ContainsKey(key))
+        if ( (_isPackaged && !LocalStoragePackage.Values.ContainsKey(key))
             || (!_isPackaged && !LocalStorageUnpackage.Exists(key)) ) 
             WriteLocalStorage(key, DefaultValue[key]);
     }
